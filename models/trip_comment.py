@@ -6,6 +6,8 @@ from db.base_class import Base
 
 
 class TripComment(Base):
+    __tablename__ = "trip_comment"
+
     id = Column(Integer, primary_key=True)
     content = Column(Text, nullable=False)
     created_at = Column(
@@ -15,5 +17,5 @@ class TripComment(Base):
     trip_id = Column(Integer, ForeignKey("trip.id", ondelete="CASCADE"), nullable=False)
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
-    user = relationship("User", back_populated="trip_comments")
-    trip = relationship("Trip", back_populated="trip_comments")
+    user = relationship("User", back_populates="trip_comments")
+    trip = relationship("Trip", back_populates="trip_comments")

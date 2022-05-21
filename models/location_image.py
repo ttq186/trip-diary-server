@@ -6,6 +6,8 @@ from db.base_class import Base
 
 
 class LocationImage(Base):
+    __tablename__ = "location_image"
+
     id = Column(Integer, primary_key=True)
     url = Column(String, nullable=False)
     uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -13,4 +15,4 @@ class LocationImage(Base):
         Integer, ForeignKey("location.id", ondelete="CASCADE"), nullable=False
     )
 
-    location = relationship("Location", back_populated="location_images")
+    location = relationship("Location", back_populates="location_images")

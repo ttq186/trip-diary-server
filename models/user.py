@@ -7,6 +7,7 @@ import utils
 
 
 class User(Base):
+    __tablename__ = "user"
     id = Column(String, primary_key=True, default=utils.generate_uuid())
     email = Column(String, nullable=False)
     password = Column(String)
@@ -24,6 +25,6 @@ class User(Base):
     )
     is_admin = Column(Boolean, default=False)
 
-    trips = relationship("Trip", back_populated="user")
-    trip_comments = relationship("TripComment", back_populated="user")
-    trip_likes = relationship("TripLike", back_populated="user")
+    trips = relationship("Trip", back_populates="user")
+    trip_comments = relationship("TripComment", back_populates="user")
+    trip_likes = relationship("TripLike", back_populates="user")
