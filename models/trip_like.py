@@ -12,4 +12,4 @@ class TripLike(Base):
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
     user = relationship("User", back_populates="trip_likes")
-    trip = relationship("Trip", back_populates="trip_likes")
+    trip = relationship("Trip", back_populates="likes")

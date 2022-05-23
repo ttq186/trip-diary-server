@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Optional, Dict, Any
+from typing import TypeVar, Generic, Dict, Any
 
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
@@ -30,11 +30,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def get(self, db: Session, id: str | int) -> Optional[ModelType]:
+    def get(self, db: Session, id: str | int) -> ModelType | None:
         return db.query(self._model).filter_by(id=id).first()
 
     def get_multi(
-        self, db: Session, *, skip: Optional[int] = 0, limit: Optional[int] = 10e6
+        self, db: Session, *, skip: int = 0, limit: int = 10e6
     ) -> list[ModelType]:
         return db.query(self._model).offset(skip).limit(limit).all()
 

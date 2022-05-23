@@ -1,4 +1,3 @@
-from curses.ascii import HT
 from fastapi import status, HTTPException
 
 
@@ -18,3 +17,18 @@ class EmailAlreadyExists(HTTPException):
     def __init__(self):
         detail = "Email already exist!"
         super().__init__(status_code=status.HTTP_409_CONFLICT, detail=detail)
+
+
+class IncorrectLoginCredentials(HTTPException):
+    def __init__(self):
+        detail = "Incorrect email or password. Try again!"
+        super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=detail)
+
+
+class AccountCreatedWithOutGoogle(HTTPException):
+    def __init__(self):
+        detail = (
+            """Looks like an account has been created before \
+            without Google sign in method. Try again!""",
+        )
+        super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)

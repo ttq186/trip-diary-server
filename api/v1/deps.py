@@ -49,7 +49,7 @@ def get_current_user(
         raise credentials_exception
     if user is None:
         raise credentials_exception
-    return
+    return user
 
 
 def get_current_superuser(

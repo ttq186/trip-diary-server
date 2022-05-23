@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
@@ -12,22 +12,24 @@ import utils
 router = APIRouter(prefix="/api/users", tags=["Users"])
 
 
-@router.get("/", response_model=list[schemas.UserOut] | schemas.UserOut)
+@router.get("/", response_model=list[schemas.UserOut])
 async def get_users(
     db: Session = Depends(deps.get_db),
-    skip: int | None = 0,
-    limit: int | None = 10e6,
+    skip: int = 0,
+    limit: int = 10e6,
     current_user: models.User = Depends(deps.get_current_user),
 ):
     if current_user.is_admin:
         users = crud.user.get_multi(db, skip=skip, limit=limit)
     else:
-        users = db.query(models.User).filter_by(id=current_user.id).first()
+        users = crud.user.get(db, id=current_user.id)
+        users = [users]
     return users
 
 
-@router.get("/{id}", response_model=schemas.UserOut | None)
+@router.get("/{id}", response_model=schemas.UserOut)
 async def get_user(
+    id: str,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
@@ -39,12 +41,12 @@ async def get_user(
     return user
 
 
-@router.create("/", response_model=schemas.UserOut)
+@router.post("/", response_model=schemas.UserOut)
 async def create_user(
     user_in: schemas.UserCreate,
     db: Session = Depends(deps.get_db),
 ):
-    user = crud.user.get_by_email(db, email=user_in.get("email"))
+    user = crud.user.get_by_email(db, email=user_in.email)
     if user is not None:
         raise exceptions.EmailAlreadyExists()
 
@@ -60,16 +62,30 @@ async def create_user(
 async def update_user(
     id: str,
     payload: schemas.UserUpdate,
+    db: Session = Depends(deps.get_current_user),
+    current_user: models.User = Depends(deps.get_current_user),
+):
+    user = crud.user.get(db, id)
+    if user is None:
+        raise exceptions.ResourceNotFound(resource_type="User", id=id)
+    if not user.is_admin and current_user.id != id:
+        raise exceptions.NotAuthorized()
+
+    current_user_data = jsonable_encoder(user)
+    update_data = {**current_user_data, **payload.dict(exclude_unset=True)}
+    user_in = schemas.UserUpdate(update_data)
+    user = crud.user.update(db, db_obj=user, obj_in=user_in)
+    return user
+
+
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def remove_user(
+    id: str,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_superuser),
 ):
-    """Update a specific user."""
-    user = crud.user.get(db, id=id)
+    user = crud.user.get(db, id)
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=id)
-
-    user_data = jsonable_encoder(user)
-    update_data = {**user_data, **payload.dict(exclude_unset=True, exclude={"id"})}
-    user_in = schemas.UserUpdate(**update_data)
-    updated_user = crud.user.update(db, db_obj=user, obj_in=user_in)
-    return updated_user
+    user = crud.user.remove(db, id=id)
+    return user

@@ -18,4 +18,4 @@ class TripComment(Base):
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
     user = relationship("User", back_populates="trip_comments")
-    trip = relationship("Trip", back_populates="trip_comments")
+    trip = relationship("Trip", back_populates="comments")

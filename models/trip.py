@@ -1,4 +1,13 @@
-from sqlalchemy import Column, String, Integer, Text, DateTime, Boolean, Float
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    String,
+    Integer,
+    Text,
+    DateTime,
+    Boolean,
+    Float,
+)
 from sqlalchemy.orm import relationship
 
 from db.base_class import Base
@@ -19,6 +28,7 @@ class Trip(Base):
     departure_at = Column(DateTime(timezone=True))
     back_trip_at = Column(DateTime(timezone=True))
     is_public = Column(Boolean, default=True)
+    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
     user = relationship("User", back_populates="trips")
     comments = relationship("TripComment", back_populates="trip")

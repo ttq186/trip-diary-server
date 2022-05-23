@@ -18,7 +18,6 @@ class UserBase(CamelModel):
     country: str | None = None
     date_of_birth: datetime | None = None
     created_at: datetime | None = None
-    is_admin: bool = False
 
 
 class UserCreate(UserBase):
@@ -45,7 +44,7 @@ class UserInDb(UserInDbBase):
     password: str
 
 
-class UserOut(UserBase):
+class UserOut(UserInDbBase):
     """Properties to return to client."""
 
-    pass
+    is_admin: bool = False
