@@ -14,7 +14,7 @@ from core.config import settings
 from api.v1 import deps
 
 
-router = APIRouter(prefix="/api/login", tags=["Authentication"])
+router = APIRouter(prefix="/login", tags=["Authentication"])
 request = requests.Request()
 
 

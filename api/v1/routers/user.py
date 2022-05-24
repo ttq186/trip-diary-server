@@ -9,7 +9,7 @@ import schemas
 import models
 import utils
 
-router = APIRouter(prefix="/api/users", tags=["Users"])
+router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.get("/", response_model=list[schemas.UserOut])
@@ -49,6 +49,8 @@ async def create_user(
     user = crud.user.get_by_email(db, email=user_in.email)
     if user is not None:
         raise exceptions.EmailAlreadyExists()
+    if not utils.is_valid_email(user_in.email):
+        raise exceptions.InvalidEmail()
 
     new_user_id = utils.generate_uuid()
     while crud.user.get(db, id=new_user_id) is not None:
