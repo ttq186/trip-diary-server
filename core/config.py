@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     REACHER_API_KEY: str
+    SENDGRID_FROM_EMAIL: str
+    SENDGRID_TEMPLATE_ID: str
+    SENDGRID_API_KEY: str
+    PASSWORD_RESET_BASE_URL: str
 
     class Config:
         env_file = ".env"

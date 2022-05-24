@@ -3,13 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.v1.routers import user, auth
 
-app = FastAPI(title="Tripari's", version="1.0.0")
+app = FastAPI(title="Tripari's", version="1.0.0", root_path="/api/v1")
 
 allow_origins = [
     "http://localhost",
     "http://localhost:3000",
-    "http://ttq186.xyz",
-    "https://ttq186.xyz",
+    "http://triparis.work",
+    "https://triparis.work",
 ]
 
 

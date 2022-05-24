@@ -8,7 +8,6 @@ import schemas
 import crud
 import exceptions
 import utils
-import models
 from core import security
 from core.config import settings
 from api.v1 import deps
@@ -44,7 +43,6 @@ async def login_via_google(
     user_data = id_token.verify_oauth2_token(
         payload.token_id, request, settings.GOOGLE_CLIENT_ID
     )
-    user_id: str = None
     user = crud.user.get_by_email(db, email=user_data.get("email"))
 
     # if email does not exist, create a new user with empty password
@@ -52,10 +50,8 @@ async def login_via_google(
         new_user_id = utils.generate_uuid()
         while crud.user.get(db, id=new_user_id) is not None:
             new_user_id = utils.generate_uuid()
-        new_user = models.User(id=new_user_id, email=user_data.get("email"))
-        db.add(new_user)
-        db.commit()
-        db.refresh(new_user)
+        user_in = schemas.UserCreate(id=new_user_id, email=user_data.get("email"))
+        new_user = crud.user.create(db, obj_in=user_in)
         user_id = new_user.id
     else:
         # raise exception if user attempts to sign in with email that has already been

@@ -1,8 +1,13 @@
+from datetime import timedelta
+
 from fastapi import APIRouter, Depends, status
 from fastapi.encoders import jsonable_encoder
+from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
 from api.v1 import deps
+from core import security
+from core.config import settings
 import crud
 import exceptions
 import schemas
@@ -19,6 +24,7 @@ async def get_users(
     limit: int = 10e6,
     current_user: models.User = Depends(deps.get_current_user),
 ):
+    """Retrieve users."""
     if current_user.is_admin:
         users = crud.user.get_multi(db, skip=skip, limit=limit)
     else:
@@ -33,6 +39,7 @@ async def get_user(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
+    """Retrieve a specific user by id."""
     if not current_user.is_admin and current_user.id != id:
         raise exceptions.NotAuthorized()
     user = crud.user.get(db, id=id)
@@ -46,6 +53,7 @@ async def create_user(
     user_in: schemas.UserCreate,
     db: Session = Depends(deps.get_db),
 ):
+    """Create a new user."""
     user = crud.user.get_by_email(db, email=user_in.email)
     if user is not None:
         raise exceptions.EmailAlreadyExists()
@@ -67,6 +75,7 @@ async def update_user(
     db: Session = Depends(deps.get_current_user),
     current_user: models.User = Depends(deps.get_current_user),
 ):
+    """Update a specific user by id."""
     user = crud.user.get(db, id)
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=id)
@@ -86,8 +95,54 @@ async def remove_user(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_superuser),
 ):
+    """Remove a specific user by id."""
     user = crud.user.get(db, id)
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=id)
     user = crud.user.remove(db, id=id)
     return user
+
+
+@router.post("/forgot-password")
+async def forgot_password(
+    user_in: schemas.UserForgotPassword, db: Session = Depends(deps.get_db)
+):
+    """Send reset password email."""
+    user = crud.user.get_by_email(db, email=user_in.email)
+    if user is None:
+        raise exceptions.EmailNotExists()
+    if user.password is None:
+        raise exceptions.AccountCreatedByGoogle()
+
+    to_encode = {"id": user.id}
+    SECRET_KEY = settings.JWT_SECRET_KEY + user.password
+    reset_token = security.create_access_token(
+        to_encode, timedelta(minutes=15), JWT_SECRET_KEY=SECRET_KEY
+    )
+    reset_link = (
+        f"{settings.PASSWORD_RESET_BASE_URL}/reset-password/{user.id}/{reset_token}"
+    )
+    utils.send_reset_password_email(to_email=user_in.email, reset_link=reset_link)
+    return {"detail": "Password reset requests successfully!"}
+
+
+@router.post("/reset-password/{id}/{token}")
+async def reset_password(
+    id: str,
+    token: str,
+    user_in: schemas.UserResetPassword,
+    db: Session = Depends(deps.get_db),
+):
+    """Reset password."""
+    user = crud.user.get(db, id=id)
+    if user is None:
+        raise exceptions.ResourceNotFound(resource_type="User", id=id)
+    try:
+        SECRET_KEY = settings.JWT_SECRET_KEY + user.password
+        jwt.decode(token, SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
+        if user_in.password is not None:
+            user = crud.user.update(db, db_obj=user, obj_in=user_in)
+        return {"detail": "Reset password successfully!"}
+
+    except JWTError:
+        raise exceptions.ResetLinkExpired()

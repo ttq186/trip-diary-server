@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from pydantic import EmailStr
+
 from schemas import CamelModel
 
 
@@ -7,7 +9,7 @@ class UserBase(CamelModel):
     """Shared properties."""
 
     id: str | None = None
-    email: str | None = None
+    email: EmailStr | None = None
     first_name: str | None = None
     last_name: str | None = None
     username: str | None = None
@@ -23,7 +25,7 @@ class UserBase(CamelModel):
 class UserCreate(UserBase):
     """Properties to receive via Create endpoint."""
 
-    email: str
+    email: EmailStr
     password: str
 
 
@@ -31,6 +33,15 @@ class UserUpdate(UserBase):
     """Properties to receive via Update endpoint."""
 
     password: str | None = None
+
+
+class UserForgotPassword(CamelModel):
+    email: EmailStr
+
+
+class UserResetPassword(CamelModel):
+    email: EmailStr
+    password: str
 
 
 class UserInDbBase(UserBase):
