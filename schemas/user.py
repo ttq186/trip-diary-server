@@ -40,7 +40,6 @@ class UserForgotPassword(CamelModel):
 
 
 class UserResetPassword(CamelModel):
-    email: EmailStr
     password: str
 
 

@@ -9,4 +9,5 @@ from .user import (
     UserForgotPassword,
     UserResetPassword,
 )
+from .trip import TripBase, TripCreate, TripInDB, TripInDBBase, TripOut, TripUpdate
 from .token import TokenOut, TokenIn, GoogleToken

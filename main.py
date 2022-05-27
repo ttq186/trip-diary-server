@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.v1.routers import user, auth
+from api.v1.routers import user, auth, trip
 
-app = FastAPI(title="Tripari's", version="1.0.0", root_path="/api/v1")
+app = FastAPI(title="Tripari's", version="1.0.0")
 
 allow_origins = [
     "http://localhost",
@@ -23,3 +23,4 @@ app.add_middleware(
 
 app.include_router(user.router)
 app.include_router(auth.router)
+app.include_router(trip.router)

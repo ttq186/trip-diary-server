@@ -72,7 +72,7 @@ async def create_user(
 async def update_user(
     id: str,
     payload: schemas.UserUpdate,
-    db: Session = Depends(deps.get_current_user),
+    db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Update a specific user by id."""
@@ -84,7 +84,7 @@ async def update_user(
 
     current_user_data = jsonable_encoder(user)
     update_data = {**current_user_data, **payload.dict(exclude_unset=True)}
-    user_in = schemas.UserUpdate(update_data)
+    user_in = schemas.UserUpdate(**update_data)
     user = crud.user.update(db, db_obj=user, obj_in=user_in)
     return user
 
@@ -141,6 +141,7 @@ async def reset_password(
         SECRET_KEY = settings.JWT_SECRET_KEY + user.password
         jwt.decode(token, SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
         if user_in.password is not None:
+            user_in.password = security.get_hashed_password(user_in.password)
             user = crud.user.update(db, db_obj=user, obj_in=user_in)
         return {"detail": "Reset password successfully!"}
 

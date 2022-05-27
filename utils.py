@@ -17,12 +17,13 @@ def to_camel(string: str) -> str:
 
 
 def is_valid_email(email: str) -> bool:
-    url = "https://api.reacher.email/v0/check_email"
-    headers = {"Authorization": settings.REACHER_API_KEY}
-    payload = {"to_email": email}
-    response = requests.post(url, json=payload, headers=headers)
-
-    return response.json().get("is_reachable") != "invalid"
+    url = (
+        f"https://api.millionverifier.com/api/v3/?api={settings.EMAIL_VERIFIER_API_KEY}"
+        f"&email={email}&timeout=10"
+    )
+    response = requests.request("GET", url)
+    print(response.json())
+    return response.json().get("result") != "invalid"
 
 
 def send_reset_password_email(to_email, reset_link):
