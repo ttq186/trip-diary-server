@@ -14,7 +14,7 @@ router = APIRouter(prefix="/trips", tags=["Trips"])
 async def get_trips(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
-    limit: int = 10e6,
+    limit: int | None = None,
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Retrieve trips by role."""
@@ -67,6 +67,7 @@ async def update_trip(
         raise exceptions.ResourceNotFound(resource_type="Trip", id=id)
     if trip.user_id != current_user.id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
+    trip_in = trip_in.dict(exclude={"user_id"})
 
     trip = crud.trip.update(db, db_obj=trip, obj_in=trip_in)
     return trip

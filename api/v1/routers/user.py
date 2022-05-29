@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, status
-from fastapi.encoders import jsonable_encoder
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
@@ -21,7 +20,7 @@ router = APIRouter(prefix="/users", tags=["Users"])
 async def get_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
-    limit: int = 10e6,
+    limit: int | None = None,
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Retrieve users."""
@@ -82,10 +81,10 @@ async def update_user(
     if not user.is_admin and current_user.id != id:
         raise exceptions.NotAuthorized()
 
-    current_user_data = jsonable_encoder(user)
-    update_data = {**current_user_data, **payload.dict(exclude_unset=True)}
-    user_in = schemas.UserUpdate(**update_data)
-    user = crud.user.update(db, db_obj=user, obj_in=user_in)
+    # current_user_data = jsonable_encoder(user)
+    # update_data = {**current_user_data, **payload.dict(exclude_unset=True)}
+    # user_in = schemas.UserUpdate(**update_data)
+    user = crud.user.update(db, db_obj=user, obj_in=payload)
     return user
 
 

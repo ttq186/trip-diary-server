@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     SENDGRID_FROM_EMAIL: str
     SENDGRID_TEMPLATE_ID: str
     SENDGRID_API_KEY: str
-    PASSWORD_RESET_BASE_URL: str
+    PASSWORD_RESET_BASE_URL: str = "http://localhost:3000"
     EMAIL_VERIFIER_API_KEY: str
 
     class Config:

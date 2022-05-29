@@ -30,11 +30,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def get(self, db: Session, id: str | int) -> ModelType | None:
+    def get(self, db: Session, id: str) -> ModelType | None:
         return db.query(self._model).filter_by(id=id).first()
 
     def get_multi(
-        self, db: Session, *, skip: int = 0, limit: int = 10e6
+        self, db: Session, *, skip: int = 0, limit: int | None = None
     ) -> list[ModelType]:
         return db.query(self._model).offset(skip).limit(limit).all()
 
@@ -59,7 +59,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def remove(self, db: Session, *, id: str | int) -> ModelType:
+    def remove(self, db: Session, *, id: str) -> ModelType | None:
         deleted_obj = self.get(db, id)
         db.delete(deleted_obj)
         db.commit()

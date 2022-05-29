@@ -6,15 +6,15 @@ from schemas import CamelModel
 class TripBase(CamelModel):
     """Shared properties."""
 
-    name: str
+    name: str | None = None
     description: str | None = None
     cover_img_url: str | None = None
     from_lat: float | None = None
     from_lng: float | None = None
     to_lat: float | None = None
-    to_lat: float | None = None
-    day_count: int | None = None
-    departure_at: datetime | None = None
+    to_lng: float | None = None
+    start_at: datetime | None = None
+    finish_at: datetime | None = None
     back_trip_at: datetime | None = None
     is_public: bool | None = None
     user_id: str | None = None
@@ -28,9 +28,8 @@ class TripCreate(TripBase):
     from_lng: float
     to_lat: float
     to_lng: float
-    day_count: int
-    departure_at: datetime
-    back_trip_at: datetime | None
+    start_at: datetime
+    finish_at: datetime
     is_public: bool = True
 
 

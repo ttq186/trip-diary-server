@@ -55,3 +55,9 @@ class ResetLinkExpired(HTTPException):
     def __init__(self):
         detail = "This reset link has expired. Try again!"
         super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
+
+
+class TripLikeAlreadyMade(HTTPException):
+    def __init__(self) -> None:
+        detail = "You already liked this trip!"
+        super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)

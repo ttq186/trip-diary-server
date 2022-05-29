@@ -22,7 +22,6 @@ def is_valid_email(email: str) -> bool:
         f"&email={email}&timeout=10"
     )
     response = requests.request("GET", url)
-    print(response.json())
     return response.json().get("result") != "invalid"
 
 
