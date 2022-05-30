@@ -10,7 +10,7 @@ from api.v1 import deps
 router = APIRouter(prefix="/trips", tags=["Trips"])
 
 
-@router.get("/", response_model=list[schemas.TripOut])
+@router.get("", response_model=list[schemas.TripOut])
 async def get_trips(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -42,7 +42,7 @@ async def get_trip(
     return trip
 
 
-@router.post("/", response_model=schemas.TripOut)
+@router.post("", response_model=schemas.TripOut)
 async def create_trip(
     trip_in: schemas.TripCreate,
     db: Session = Depends(deps.get_db),

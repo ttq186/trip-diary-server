@@ -16,7 +16,7 @@ import utils
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.get("/", response_model=list[schemas.UserOut])
+@router.get("", response_model=list[schemas.UserOut])
 async def get_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -47,7 +47,7 @@ async def get_user(
     return user
 
 
-@router.post("/", response_model=schemas.UserOut)
+@router.post("", response_model=schemas.UserOut)
 async def create_user(
     user_in: schemas.UserCreate,
     db: Session = Depends(deps.get_db),

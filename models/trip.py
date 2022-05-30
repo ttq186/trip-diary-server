@@ -4,7 +4,7 @@ from sqlalchemy import (
     String,
     Integer,
     Text,
-    DateTime,
+    Date,
     Boolean,
     Float,
 )
@@ -20,13 +20,13 @@ class Trip(Base):
     name = Column(String, nullable=False)
     description = Column(Text)
     cover_img_url = Column(String)
-    from_lat = Column(Float)
-    from_lng = Column(Float)
-    to_lat = Column(Float)
-    to_lng = Column(Float)
-    start_at = Column(DateTime(timezone=True))
-    finish_at = Column(DateTime(timezone=True))
-    back_trip_at = Column(DateTime(timezone=True))
+    from_lat = Column(Float, nullable=False)
+    from_lng = Column(Float, nullable=False)
+    to_lat = Column(Float, nullable=False)
+    to_lng = Column(Float, nullable=False)
+    start_at = Column(Date, nullable=False)
+    finish_at = Column(Date)
+    back_trip_at = Column(Date)
     is_public = Column(Boolean, default=True)
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 

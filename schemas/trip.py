@@ -1,11 +1,13 @@
-from datetime import datetime
+from datetime import date
 
 from schemas import CamelModel
+from schemas.location import LocationOut
 
 
 class TripBase(CamelModel):
     """Shared properties."""
 
+    id: int | None = None
     name: str | None = None
     description: str | None = None
     cover_img_url: str | None = None
@@ -13,10 +15,11 @@ class TripBase(CamelModel):
     from_lng: float | None = None
     to_lat: float | None = None
     to_lng: float | None = None
-    start_at: datetime | None = None
-    finish_at: datetime | None = None
-    back_trip_at: datetime | None = None
+    start_at: date | None = None
+    finish_at: date | None = None
+    back_trip_at: date | None = None
     is_public: bool | None = None
+    locations: list[LocationOut] | None = None
     user_id: str | None = None
 
 
@@ -28,15 +31,19 @@ class TripCreate(TripBase):
     from_lng: float
     to_lat: float
     to_lng: float
-    start_at: datetime
-    finish_at: datetime
+    start_at: date
+    finish_at: date
     is_public: bool = True
+
+    class Config:
+        exclude = ["id"]
 
 
 class TripUpdate(TripBase):
     """Properties to receive via Update endpoint."""
 
-    pass
+    class Config:
+        exclude = ["id", "user_id"]
 
 
 class TripInDBBase(TripBase):
@@ -51,4 +58,4 @@ class TripInDB(TripInDBBase):
 class TripOut(TripInDB):
     """Properties to return to client."""
 
-    pass
+    locations: list[LocationOut]

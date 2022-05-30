@@ -28,11 +28,17 @@ class UserCreate(UserBase):
     email: EmailStr
     password: str
 
+    class Config:
+        exclude = ["id"]
+
 
 class UserUpdate(UserBase):
     """Properties to receive via Update endpoint."""
 
     password: str | None = None
+
+    class Config:
+        exclude = ["id"]
 
 
 class UserForgotPassword(CamelModel):

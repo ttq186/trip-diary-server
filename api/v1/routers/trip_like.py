@@ -8,11 +8,11 @@ import models
 import exceptions
 
 
-router = APIRouter(prefix="/trip_likes", tags=["Trip Likes"])
+router = APIRouter(prefix="/trip_likes", tags=["Likes"])
 
 
-@router.post("/", response_model=schemas.TripLikeOut)
-async def create_trip_like_by_trip_id(
+@router.post("", response_model=schemas.TripLikeOut)
+async def create_trip_like_by_trip(
     trip_id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -26,7 +26,7 @@ async def create_trip_like_by_trip_id(
     return trip
 
 
-@router.get("/", response_model=list[schemas.TripLikeOut])
+@router.get("", response_model=list[schemas.TripLikeOut])
 async def get_trip_likes(
     trip_id: int | None = None,
     db: Session = Depends(deps.get_db),
@@ -47,7 +47,7 @@ async def get_trip_likes(
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def remove_trip_like_by_id(
+async def remove_trip_like(
     id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -61,8 +61,8 @@ async def remove_trip_like_by_id(
     return trip_like
 
 
-@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
-async def remove_trip_like_by_trip_id(
+@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
+async def remove_trip_like_by_trip(
     trip_id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
