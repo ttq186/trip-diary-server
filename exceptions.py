@@ -61,3 +61,9 @@ class TripLikeAlreadyMade(HTTPException):
     def __init__(self) -> None:
         detail = "You already liked this trip!"
         super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
+
+
+class TripLikeHasNotBeenMade(HTTPException):
+    def __init__(self) -> None:
+        detail = "You haven't liked this trip!"
+        super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
