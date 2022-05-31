@@ -15,4 +15,4 @@ class LocationImage(Base):
         Integer, ForeignKey("location.id", ondelete="CASCADE"), nullable=False
     )
 
-    location = relationship("Location", back_populates="location_images")
+    location = relationship("Location", back_populates="images")

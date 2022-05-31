@@ -3,6 +3,7 @@ from datetime import date
 from pydantic import validator
 
 from schemas import CamelModel
+from schemas.location_image import LocationImageOut
 
 
 class LocationBase(CamelModel):
@@ -35,9 +36,6 @@ class LocationCreate(LocationBase):
 class LocationUpdate(LocationBase):
     """Properties to return via Update endpoint."""
 
-    class Config:
-        exclude = {"trip_id", "user_id"}
-
 
 class LocationInDbBase(LocationBase):
     class Config:
@@ -52,3 +50,4 @@ class LocationOut(LocationInDbBase):
     """Properties to retur to client."""
 
     id: int
+    images: list[LocationImageOut]

@@ -21,13 +21,6 @@ class TripBase(CamelModel):
     is_public: bool | None = None
     user_id: str | None = None
 
-    @validator("finish_at")
-    def date_must_be_in_future(cls, v):
-        curr_date = date.today()
-        if curr_date >= v:
-            raise ValueError("Date must in the future")
-        return v
-
 
 class TripCreate(TripBase):
     """Properties to receive via Create endpoint."""
@@ -53,6 +46,15 @@ class TripCreate(TripBase):
 
 class TripUpdate(TripBase):
     """Properties to receive via Update endpoint."""
+
+    @validator("finish_at")
+    def date_must_be_in_future(cls, v):
+        if v is None:
+            return v
+        curr_date = date.today()
+        if curr_date >= v:
+            raise ValueError("Date must in the future")
+        return v
 
 
 class TripInDBBase(TripBase):

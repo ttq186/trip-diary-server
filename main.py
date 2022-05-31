@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from core.config import settings
+
 from api.v1.routers import (
     user,
     auth,
@@ -8,10 +10,11 @@ from api.v1.routers import (
     trip_like,
     location,
     trip_comment,
+    location_image,
     checklist_item,
 )
 
-app = FastAPI(title="Tripari's", version="1.0.0")
+app = FastAPI(title="Tripari's", version="1.0.0", root_path=settings.ROOT_PATH)
 
 allow_origins = [
     "http://localhost",
@@ -33,6 +36,7 @@ app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(trip.router)
 app.include_router(location.router)
+app.include_router(location_image.router)
 app.include_router(checklist_item.router)
 app.include_router(trip_like.router)
 app.include_router(trip_comment.router)

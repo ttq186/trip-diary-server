@@ -2,6 +2,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
+    ROOT_PATH: str = ""
     DB_NAME: str
     DB_PASSWORD: str
     DB_USERNAME: str
