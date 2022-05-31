@@ -35,3 +35,9 @@ class Trip(Base):
     likes = relationship("TripLike", back_populates="trip")
     checklist_items = relationship("ChecklistItem", back_populates="trip")
     locations = relationship("Location", back_populates="trip")
+
+    @property
+    def num_of_likes(self) -> int:
+        if self.likes is None:
+            return 0
+        return len(self.likes)

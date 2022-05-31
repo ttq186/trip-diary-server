@@ -2,6 +2,7 @@ from schemas import CamelModel
 
 
 class TripLikeBase(CamelModel):
+    id: int | None = None
     trip_id: int | None = None
     user_id: str | None = None
 
@@ -19,9 +20,9 @@ class TripLikeInDbBase(TripLikeBase):
         orm_mode = True
 
 
-class TripLikeInDb(TripLikeBase):
+class TripLikeInDb(TripLikeInDbBase):
     pass
 
 
-class TripLikeOut(TripLikeInDb):
+class TripLikeOut(TripLikeInDbBase):
     pass

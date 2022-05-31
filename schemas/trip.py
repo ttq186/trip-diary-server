@@ -19,7 +19,6 @@ class TripBase(CamelModel):
     finish_at: date | None = None
     back_trip_at: date | None = None
     is_public: bool | None = None
-    locations: list[LocationOut] | None = None
     user_id: str | None = None
 
 
@@ -58,4 +57,5 @@ class TripInDB(TripInDBBase):
 class TripOut(TripInDB):
     """Properties to return to client."""
 
+    num_of_likes: int
     locations: list[LocationOut]

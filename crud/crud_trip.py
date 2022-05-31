@@ -1,14 +1,14 @@
 from sqlalchemy.orm import Session
 
-import models
-import schemas
+from schemas import TripCreate, TripUpdate
+from models import Trip
 from crud.base import CRUDBase
 
 
-class CRUDTrip(CRUDBase[models.Trip, schemas.TripCreate, schemas.TripUpdate]):
+class CRUDTrip(CRUDBase[Trip, TripCreate, TripUpdate]):
     def get_multi_by_owner(
         self, db: Session, *, skip: int = 0, limit: int | None = None, user_id: str
-    ) -> list[models.Trip]:
+    ) -> list[Trip]:
         trips = (
             db.query(self._model)
             .filter_by(user_id=user_id)
@@ -19,4 +19,4 @@ class CRUDTrip(CRUDBase[models.Trip, schemas.TripCreate, schemas.TripUpdate]):
         return trips
 
 
-trip = CRUDTrip(models.Trip)
+trip = CRUDTrip(Trip)
