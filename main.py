@@ -1,7 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.v1.routers import user, auth, trip, trip_like, location, trip_comment
+from api.v1.routers import (
+    user,
+    auth,
+    trip,
+    trip_like,
+    location,
+    trip_comment,
+    checklist_item,
+)
 
 app = FastAPI(title="Tripari's", version="1.0.0")
 
@@ -25,5 +33,6 @@ app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(trip.router)
 app.include_router(location.router)
+app.include_router(checklist_item.router)
 app.include_router(trip_like.router)
 app.include_router(trip_comment.router)

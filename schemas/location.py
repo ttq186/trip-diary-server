@@ -1,5 +1,7 @@
 from datetime import date
 
+from pydantic import validator
+
 from schemas import CamelModel
 
 
@@ -21,6 +23,13 @@ class LocationCreate(LocationBase):
     lat: float
     lng: float
     start_at: date
+
+    @validator("start_at")
+    def date_must_be_in_future(cls, v):
+        curr_date = date.today()
+        if curr_date >= v:
+            raise ValueError("Date must in the future")
+        return v
 
 
 class LocationUpdate(LocationBase):

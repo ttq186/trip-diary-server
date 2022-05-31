@@ -1,15 +1,14 @@
 from .camel_model import CamelModel
 from .user import (
-    UserCreate,
-    UserInDb,
-    UserInDbBase,
     UserOut,
+    UserCreate,
     UserUpdate,
-    UserForgotPassword,
     UserResetPassword,
+    UserForgotPassword,
 )
-from .trip import TripBase, TripCreate, TripInDB, TripInDBBase, TripOut, TripUpdate
-from .trip_like import TripLikeCreate, TripLikeUpdate, TripLikeInDb, TripLikeOut
+from .trip import TripCreate, TripOut, TripUpdate
+from .checklist_item import CheckListItemCreate, CheckListItemUpdate, CheckListItemOut
+from .trip_like import TripLikeCreate, TripLikeUpdate, TripLikeOut
 from .trip_comment import TripCommentCreate, TripCommentUpdate, TripCommentOut
-from .location import LocationCreate, LocationUpdate, LocationInDb, LocationOut
+from .location import LocationCreate, LocationUpdate, LocationOut
 from .token import TokenOut, TokenIn, GoogleToken

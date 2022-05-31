@@ -67,7 +67,7 @@ async def update_trip(
         raise exceptions.ResourceNotFound(resource_type="Trip", id=id)
     if trip.user_id != current_user.id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
-    trip_in = trip_in.dict(exclude={"user_id"})
+    trip_in = trip_in.dict(exclude_unset=True)
 
     trip = crud.trip.update(db, db_obj=trip, obj_in=trip_in)
     return trip

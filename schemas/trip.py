@@ -1,5 +1,7 @@
 from datetime import date
 
+from pydantic import validator
+
 from schemas import CamelModel
 from schemas.location import LocationOut
 
@@ -7,7 +9,6 @@ from schemas.location import LocationOut
 class TripBase(CamelModel):
     """Shared properties."""
 
-    id: int | None = None
     name: str | None = None
     description: str | None = None
     cover_img_url: str | None = None
@@ -17,9 +18,15 @@ class TripBase(CamelModel):
     to_lng: float | None = None
     start_at: date | None = None
     finish_at: date | None = None
-    back_trip_at: date | None = None
     is_public: bool | None = None
     user_id: str | None = None
+
+    @validator("finish_at")
+    def date_must_be_in_future(cls, v):
+        curr_date = date.today()
+        if curr_date >= v:
+            raise ValueError("Date must in the future")
+        return v
 
 
 class TripCreate(TripBase):
@@ -31,8 +38,14 @@ class TripCreate(TripBase):
     to_lat: float
     to_lng: float
     start_at: date
-    finish_at: date
     is_public: bool = True
+
+    @validator("start_at")
+    def date_must_be_in_future(cls, v):
+        curr_date = date.today()
+        if curr_date >= v:
+            raise ValueError("Date must in the future")
+        return v
 
     class Config:
         exclude = ["id"]
@@ -40,9 +53,6 @@ class TripCreate(TripBase):
 
 class TripUpdate(TripBase):
     """Properties to receive via Update endpoint."""
-
-    class Config:
-        exclude = ["id", "user_id"]
 
 
 class TripInDBBase(TripBase):
@@ -57,5 +67,6 @@ class TripInDB(TripInDBBase):
 class TripOut(TripInDB):
     """Properties to return to client."""
 
+    id: int
     num_of_likes: int
     locations: list[LocationOut]
