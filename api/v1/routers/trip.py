@@ -74,7 +74,7 @@ async def update_trip(
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def remove_trip(
+async def delete_trip(
     id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),

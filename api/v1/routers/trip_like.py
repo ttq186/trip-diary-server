@@ -52,7 +52,7 @@ async def create_like(
 
 
 @router.delete("/{trip_id}/likes", status_code=status.HTTP_204_NO_CONTENT)
-async def remove_like(
+async def delete_trip(
     trip_id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
