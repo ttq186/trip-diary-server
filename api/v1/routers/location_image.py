@@ -98,23 +98,23 @@ async def create_location_image(
     "/{trip_id}/locations/{location_id}/images/{image_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-async def delete_checklist_item(
+async def delete_location_image(
     trip_id: int,
     location_id: int,
     image_id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
-    location_image = crud.location_image.get_multi_by_location_id(
-        db, location_id=location_id
-    )
+    location_image = crud.location_image.get(db, id=image_id)
     if location_image is None:
         raise exceptions.ResourceNotFound(resource_type="Location Image", id=image_id)
+    if location_image.location_id != location_id:
+        raise exceptions.NotAuthorized()
 
-    location = crud.location.get_multi_by_trip_id(db, trip_id=trip_id)
+    location = crud.location.get(db, id=location_id)
     if location is None:
         raise exceptions.ResourceNotFound(resource_type="Location", id=location_id)
-    if location.trip_id != trip_id or location.user_id != current_user.id:
+    if location.trip_id != trip_id:
         raise exceptions.NotAuthorized()
     location_image = crud.location_image.remove(db, id=image_id)
     return location_image

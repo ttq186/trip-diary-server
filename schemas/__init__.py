@@ -3,6 +3,7 @@ from .user import (
     UserOut,
     UserCreate,
     UserUpdate,
+    UserBlobSASOut,
     UserResetPassword,
     UserForgotPassword,
 )

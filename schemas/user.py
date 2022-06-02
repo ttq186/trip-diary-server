@@ -64,3 +64,7 @@ class UserOut(UserInDbBase):
     """Properties to return to client."""
 
     is_admin: bool = False
+
+
+class UserBlobSASOut(CamelModel):
+    sas_token: str

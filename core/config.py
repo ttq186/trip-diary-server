@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     SENDGRID_API_KEY: str
     PASSWORD_RESET_BASE_URL: str = "http://localhost:3000"
     EMAIL_VERIFIER_API_KEY: str
+    GOOGLE_CLIENT_ID: str
+    AZURE_STORAGE_ACCOUNT_NAME: str
+    AZURE_CONTAINER_NAME: str
+    AZURE_ACCESS_KEY: str
 
     class Config:
         env_file = ".env"

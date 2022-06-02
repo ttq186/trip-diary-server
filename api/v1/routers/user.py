@@ -1,8 +1,13 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, status
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
+from azure.storage.blob import (
+    generate_account_sas,
+    AccountSasPermissions,
+    ResourceTypes,
+)
 
 from api.v1 import deps
 from core import security
@@ -14,6 +19,20 @@ import models
 import utils
 
 router = APIRouter(prefix="/users", tags=["Users"])
+
+
+@router.get("/get-blob-sas")
+async def get_blob_sas(current_user: models.User = Depends(deps.get_current_user)):
+    sas_token = generate_account_sas(
+        account_name=settings.AZURE_STORAGE_ACCOUNT_NAME,
+        resource_types=ResourceTypes(object=True),
+        account_key=settings.AZURE_ACCESS_KEY,
+        permission=AccountSasPermissions(
+            read=True, write=True, create=True, update=True
+        ),
+        expiry=datetime.now() + timedelta(hours=1),
+    )
+    return schemas.UserBlobSASOut(sas_token=sas_token)
 
 
 @router.get("", response_model=list[schemas.UserOut])
