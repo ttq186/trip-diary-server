@@ -21,7 +21,7 @@ import utils
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.get("/get-blob-sas")
+@router.get("/blob-sas", response_model=schemas.UserBlobSASOut)
 async def get_blob_sas(current_user: models.User = Depends(deps.get_current_user)):
     sas_token = generate_account_sas(
         account_name=settings.AZURE_STORAGE_ACCOUNT_NAME,
@@ -30,7 +30,7 @@ async def get_blob_sas(current_user: models.User = Depends(deps.get_current_user
         permission=AccountSasPermissions(
             read=True, write=True, create=True, update=True
         ),
-        expiry=datetime.now() + timedelta(hours=1),
+        expiry=datetime.now() + timedelta(hours=12),
     )
     return schemas.UserBlobSASOut(sas_token=sas_token)
 
