@@ -25,7 +25,8 @@ class Trip(Base):
     to_lat = Column(Float, nullable=False)
     to_lng = Column(Float, nullable=False)
     start_at = Column(Date, nullable=False)
-    finish_at = Column(Date)
+    back_trip_at = Column(Date)
+    is_finished = Column(Boolean, default=False)
     is_public = Column(Boolean, default=True)
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 

@@ -17,7 +17,8 @@ class TripBase(CamelModel):
     to_lat: float | None = None
     to_lng: float | None = None
     start_at: date | None = None
-    finish_at: date | None = None
+    back_trip_at: date | None = None
+    is_finished: bool | None = None
     is_public: bool | None = None
     user_id: str | None = None
 
@@ -47,7 +48,7 @@ class TripCreate(TripBase):
 class TripUpdate(TripBase):
     """Properties to receive via Update endpoint."""
 
-    @validator("finish_at")
+    @validator("back_trip_at")
     def date_must_be_in_future(cls, v):
         if v is None:
             return v
