@@ -104,7 +104,7 @@ async def delete_trip(
     return trip
 
 
-@router.post("/{id}/remind-again")
+@router.post("/{id}/remind-again", response_model=schemas.TripOut)
 async def remind_trip_again(
     id: int,
     db: Session = Depends(deps.get_db),
