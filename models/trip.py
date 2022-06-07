@@ -5,10 +5,12 @@ from sqlalchemy import (
     Integer,
     Text,
     Date,
+    DateTime,
     Boolean,
     Float,
 )
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 from db.base_class import Base
 
@@ -21,13 +23,15 @@ class Trip(Base):
     description = Column(Text)
     cover_img_url = Column(String)
     from_lat = Column(Float, nullable=False)
-    from_lng = Column(Float, nullable=False)
     to_lat = Column(Float, nullable=False)
+    from_lng = Column(Float, nullable=False)
     to_lng = Column(Float, nullable=False)
     start_at = Column(Date, nullable=False)
     back_trip_at = Column(Date)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     is_finished = Column(Boolean, default=False)
     is_public = Column(Boolean, default=True)
+    can_be_reminded = Column(Boolean, default=True)
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
     user = relationship("User", back_populates="trips")

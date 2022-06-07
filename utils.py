@@ -31,9 +31,45 @@ def send_reset_password_email(to_email, reset_link):
         to_emails=to_email,
         subject="Reset your Tripari's password",
     )
-    message.template_id = settings.SENDGRID_TEMPLATE_ID
+    message.template_id = settings.SENDGRID_RESET_PASSWORD_TEMPLATE_ID
     message.dynamic_template_data = {"resetLink": reset_link}
 
+    try:
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        sg.send(message)
+    except Exception as e:
+        print(e)
+
+
+def send_remind_trip_email(to_email, start_date, remind_link):
+    message = Mail(
+        from_email=settings.SENDGRID_FROM_EMAIL,
+        to_emails=to_email,
+        subject="Next trip is coming!",
+    )
+    message.template_id = settings.SENDGRID_REMIND_TRIP_TEMPLATE_ID
+    message.dynamic_template_data = {
+        "startDate": start_date,
+        "remindLink": remind_link,
+    }
+    try:
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        sg.send(message)
+    except Exception as e:
+        print(e)
+
+
+def send_remind_trip_email_again(to_email, start_date):
+    message = Mail(
+        from_email=settings.SENDGRID_FROM_EMAIL,
+        to_emails=to_email,
+        subject="Next trip is coming!",
+    )
+    print(settings.SENDGRID_REMIND_TRIP_AGAIN_TEMPLATE_ID)
+    message.template_id = settings.SENDGRID_REMIND_TRIP_AGAIN_TEMPLATE_ID
+    message.dynamic_template_data = {
+        "startDate": start_date,
+    }
     try:
         sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
         sg.send(message)

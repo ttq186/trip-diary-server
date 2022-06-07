@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import validator
 
@@ -13,13 +13,15 @@ class TripBase(CamelModel):
     description: str | None = None
     cover_img_url: str | None = None
     from_lat: float | None = None
-    from_lng: float | None = None
     to_lat: float | None = None
+    from_lng: float | None = None
     to_lng: float | None = None
     start_at: date | None = None
     back_trip_at: date | None = None
+    created_at: datetime | None = None
     is_finished: bool | None = None
     is_public: bool | None = None
+    can_be_reminded: bool | None = None
     user_id: str | None = None
 
 
@@ -33,6 +35,7 @@ class TripCreate(TripBase):
     to_lng: float
     start_at: date
     is_public: bool = True
+    can_be_reminded: bool = True
 
     @validator("start_at")
     def date_must_be_in_future(cls, v):
