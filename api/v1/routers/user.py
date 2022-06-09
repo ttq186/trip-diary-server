@@ -89,7 +89,7 @@ async def create_user(
 @router.put("/{id}", response_model=schemas.UserOut)
 async def update_user(
     id: str,
-    payload: schemas.UserUpdate,
+    user_in: schemas.UserUpdate,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
@@ -100,7 +100,8 @@ async def update_user(
     if not user.is_admin and current_user.id != id:
         raise exceptions.NotAuthorized()
 
-    user = crud.user.update(db, db_obj=user, obj_in=payload)
+    user_in = user_in.dict(exclude={"id"})
+    user = crud.user.update(db, db_obj=user, obj_in=user_in)
     return user
 
 

@@ -81,6 +81,7 @@ async def update_checklist_item(
     if checklist_item.trip_id != trip_id:
         raise exceptions.NotAuthorized()  # ???
 
+    checklist_item_in = checklist_item_in.dict(exclude={"id", "trip_id"})
     checklist_item = crud.checklist_item.update(
         db, db_obj=checklist_item, obj_in=checklist_item_in
     )

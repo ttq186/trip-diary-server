@@ -20,7 +20,6 @@ class LocationBase(CamelModel):
 class LocationCreate(LocationBase):
     """Properties to reiceive via Create endpoint."""
 
-    review: str
     lat: float
     lng: float
     start_at: date

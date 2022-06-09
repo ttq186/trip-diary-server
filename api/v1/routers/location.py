@@ -82,6 +82,7 @@ async def update_location(
     if location.trip_id != trip_id:
         raise exceptions.NotAuthorized()  # ???
 
+    location_in = location_in.dict(exclude={"id", "trip_id"})
     location = crud.location.update(db, db_obj=location, obj_in=location_in)
     return location
 
