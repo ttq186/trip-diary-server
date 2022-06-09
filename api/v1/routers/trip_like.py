@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Response
 from sqlalchemy.orm import Session
 
 from api.v1 import deps
@@ -51,7 +51,9 @@ async def create_like(
     return trip_like
 
 
-@router.delete("/{trip_id}/likes", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{trip_id}/likes", status_code=status.HTTP_204_NO_CONTENT, response_class=Response
+)
 async def delete_trip(
     trip_id: int,
     db: Session = Depends(deps.get_db),
@@ -68,5 +70,4 @@ async def delete_trip(
     )
     if trip_like is None:
         raise exceptions.TripLikeHasNotBeenMade()
-    trip_like = crud.trip_like.remove(db, id=trip_like.id)
-    return trip_like
+    crud.trip_like.remove(db, id=trip_like.id)

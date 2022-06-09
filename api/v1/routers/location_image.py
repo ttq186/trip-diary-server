@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Response
 from sqlalchemy.orm import Session
 
 import models
@@ -97,6 +97,7 @@ async def create_location_image(
 @router.delete(
     "/{trip_id}/locations/{location_id}/images/{image_id}",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response
 )
 async def delete_location_image(
     trip_id: int,
@@ -116,5 +117,4 @@ async def delete_location_image(
         raise exceptions.ResourceNotFound(resource_type="Location", id=location_id)
     if location.trip_id != trip_id:
         raise exceptions.NotAuthorized()
-    location_image = crud.location_image.remove(db, id=image_id)
-    return location_image
+    crud.location_image.remove(db, id=image_id)

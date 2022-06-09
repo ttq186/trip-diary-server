@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Response
 from sqlalchemy.orm import Session
 
 import models
@@ -88,7 +88,11 @@ async def update_checklist_item(
     return checklist_item
 
 
-@router.delete("/{trip_id}/checklist/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{trip_id}/checklist/{item_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
 async def delete_checklist_item(
     trip_id: int,
     item_id: int,
@@ -107,5 +111,4 @@ async def delete_checklist_item(
     if checklist_item.trip_id != trip_id:
         raise exceptions.NotAuthorized()  # ???
 
-    checklist_item = crud.checklist_item.remove(db, id=item_id)
-    return checklist_item
+    crud.checklist_item.remove(db, id=item_id)

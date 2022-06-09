@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Response
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from azure.storage.blob import (
@@ -105,7 +105,7 @@ async def update_user(
     return user
 
 
-@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
 async def delete_user(
     id: str,
     db: Session = Depends(deps.get_db),
@@ -115,8 +115,7 @@ async def delete_user(
     user = crud.user.get(db, id)
     if user is None:
         raise exceptions.ResourceNotFound(resource_type="User", id=id)
-    user = crud.user.remove(db, id=id)
-    return user
+    crud.user.remove(db, id=id)
 
 
 @router.post("/forgot-password")

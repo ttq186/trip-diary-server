@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, Response
 from sqlalchemy.orm import Session
 
 import schemas
@@ -84,7 +84,9 @@ async def update_comment(
 
 
 @router.delete(
-    "/{trip_id}/comments/{comment_id}", status_code=status.HTTP_204_NO_CONTENT
+    "/{trip_id}/comments/{comment_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
 )
 async def delete_comment(
     trip_id: int,
@@ -101,5 +103,4 @@ async def delete_comment(
         raise exceptions.TripLikeHasNotBeenMade()
     if trip_comment.user_id != current_user.id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
-    trip_comment = crud.trip_comment.remove(db, id=comment_id)
-    return trip_comment
+    crud.trip_comment.remove(db, id=comment_id)

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Response
 from sqlalchemy.orm import Session
 
 import models
@@ -88,7 +88,9 @@ async def update_location(
 
 
 @router.delete(
-    "/{trip_id}/locations/{location_id}", status_code=status.HTTP_204_NO_CONTENT
+    "/{trip_id}/locations/{location_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
 )
 async def delete_location(
     trip_id: int,
@@ -108,5 +110,4 @@ async def delete_location(
     if location.trip_id != trip_id:
         raise exceptions.NotAuthorized()  # ???
 
-    location = crud.location.remove(db, id=location_id)
-    return location
+    crud.location.remove(db, id=location_id)
