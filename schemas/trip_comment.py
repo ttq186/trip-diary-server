@@ -17,8 +17,7 @@ class TripCommentCreate(TripCommentBase):
 
 
 class TripCommentUpdate(TripCommentBase):
-    class Config:
-        exclude = {"trip_id", "user_id", "id"}
+    pass
 
 
 class TripCommentInDbBase(TripCommentBase):

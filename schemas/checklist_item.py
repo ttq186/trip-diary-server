@@ -19,9 +19,6 @@ class CheckListItemCreate(CheckListItemBase):
 class CheckListItemUpdate(CheckListItemBase):
     """Properties to return via Update endpoint."""
 
-    class Config:
-        exclude = {"trip_id", "user_id"}
-
 
 class CheckListItemInDbBase(CheckListItemBase):
     class Config:

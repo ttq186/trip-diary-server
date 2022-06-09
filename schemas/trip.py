@@ -44,9 +44,6 @@ class TripCreate(TripBase):
             raise ValueError("Date must in the future")
         return v
 
-    class Config:
-        exclude = ["id"]
-
 
 class TripUpdate(TripBase):
     """Properties to receive via Update endpoint."""
