@@ -100,7 +100,7 @@ async def update_user(
     if not user.is_admin and current_user.id != id:
         raise exceptions.NotAuthorized()
 
-    user_in = user_in.dict(exclude={"id"})
+    user_in = user_in.dict(exclude={"id"}, exclude_unset=True)
     user = crud.user.update(db, db_obj=user, obj_in=user_in)
     return user
 

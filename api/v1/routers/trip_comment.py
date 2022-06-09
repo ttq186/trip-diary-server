@@ -76,7 +76,9 @@ async def update_comment(
         raise exceptions.ResourceNotFound(resource_type="Comment", id=comment_id)
     if trip_comment.trip_id != trip_id or trip_comment.user_id != current_user.id:
         raise exceptions.NotAuthorized()  # ???
-    trip_comment_in = trip_comment_in.dict(exclude={"id", "user_id", "trip_id"})
+    trip_comment_in = trip_comment_in.dict(
+        exclude={"id", "user_id", "trip_id"}, exclude_unset=True
+    )
     trip_comment = crud.trip_comment.update(
         db, db_obj=trip_comment, obj_in=trip_comment_in
     )

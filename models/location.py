@@ -8,7 +8,7 @@ class Location(Base):
     __tablename__ = "location"
 
     id = Column(Integer, primary_key=True)
-    review = Column(Text, nullable=False)
+    review = Column(Text)
     lat = Column(Float)
     lng = Column(Float)
     start_at = Column(Date)
