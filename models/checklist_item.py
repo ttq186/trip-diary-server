@@ -11,6 +11,6 @@ class ChecklistItem(Base):
     name = Column(String, nullable=False)
     notes = Column(Text)
     has_prepared = Column(Boolean, default=False)
-    trip_id = Column(Integer, ForeignKey("trip.id", ondelete="CASCADE"), nullable=False)
+    trip_id = Column(Integer, ForeignKey("trip.id", ondelete="CASCADE"))
 
     trip = relationship("Trip", back_populates="checklist_items")

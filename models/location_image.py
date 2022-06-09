@@ -11,8 +11,6 @@ class LocationImage(Base):
     id = Column(Integer, primary_key=True)
     url = Column(String, nullable=False)
     uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
-    location_id = Column(
-        Integer, ForeignKey("location.id", ondelete="CASCADE"), nullable=False
-    )
+    location_id = Column(Integer, ForeignKey("location.id", ondelete="CASCADE"))
 
     location = relationship("Location", back_populates="images")

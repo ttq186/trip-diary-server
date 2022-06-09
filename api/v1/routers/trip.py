@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
 import schemas
@@ -88,7 +89,7 @@ async def update_trip(
     return trip
 
 
-@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
 async def delete_trip(
     id: int,
     db: Session = Depends(deps.get_db),
@@ -100,8 +101,7 @@ async def delete_trip(
         raise exceptions.ResourceNotFound(resource_type="Trip", id=id)
     if trip.user_id != current_user.id and (not current_user.is_admin):
         raise exceptions.NotAuthorized()
-    trip = crud.trip.remove(db, id=id)
-    return trip
+    crud.trip.remove(db, id=id)
 
 
 @router.post("/{id}/remind-again", response_model=schemas.TripOut)

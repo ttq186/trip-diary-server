@@ -32,7 +32,7 @@ class Trip(Base):
     is_finished = Column(Boolean, default=False)
     is_public = Column(Boolean, default=True)
     can_be_reminded = Column(Boolean, default=True)
-    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
 
     user = relationship("User", back_populates="trips")
     comments = relationship("TripComment", back_populates="trip")

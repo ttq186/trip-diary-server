@@ -12,8 +12,8 @@ class Location(Base):
     lat = Column(Float)
     lng = Column(Float)
     start_at = Column(Date)
-    trip_id = Column(Integer, ForeignKey("trip.id", ondelete="CASCADE"), nullable=False)
-    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    trip_id = Column(Integer, ForeignKey("trip.id", ondelete="CASCADE"))
+    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
 
     trip = relationship("Trip", back_populates="locations")
     images = relationship("LocationImage", back_populates="location")
