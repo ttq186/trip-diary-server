@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from schemas import TripCreate, TripUpdate
+from schemas import TripCreate, TripUpdate, TripScope, TripType
 from models import Trip
 from crud.base import CRUDBase
 
@@ -10,49 +10,21 @@ class CRUDTrip(CRUDBase[Trip, TripCreate, TripUpdate]):
         self,
         db: Session,
         *,
-        is_around: bool = False,
-        is_global: bool = False,
+        user_id: str | None = None,
+        trip_type: TripType = TripType.ALL,
+        trip_scope: TripScope = TripScope.ALL,
         skip: int = 0,
         limit: int | None = None
     ) -> list[Trip]:
-        if is_around:
-            trips = (
-                db.query(Trip)
-                .filter(Trip.back_trip_at.isnot(None))
-                .offset(skip)
-                .limit(limit)
-                .all()
-            )
-        else:
-            trips = db.query(Trip).offset(skip).limit(limit).all()
-        return trips
+        stmt = db.query(Trip)
+        if user_id is not None:
+            stmt = stmt.filter(Trip.user_id == user_id)
+        if trip_type == TripType.AROUND:
+            stmt = stmt.filter(Trip.back_trip_at.isnot(None))
+        elif trip_type == TripType.SINGLE:
+            stmt = stmt.filter(Trip.back_trip_at == None)  # noqa
 
-    def get_multi_by_owner(
-        self,
-        db: Session,
-        *,
-        is_around: bool = False,
-        is_global: bool = False,
-        skip: int = 0,
-        limit: int | None = None,
-        user_id: str
-    ) -> list[Trip]:
-        if is_around:
-            trips = (
-                db.query(Trip)
-                .filter(Trip.back_trip_at.isnot(None), Trip.user_id == user_id)
-                .offset(skip)
-                .limit(limit)
-                .all()
-            )
-        else:
-            trips = (
-                db.query(Trip)
-                .filter_by(user_id=user_id)
-                .offset(skip)
-                .limit(limit)
-                .all()
-            )
+        trips = stmt.offset(skip).limit(limit).all()
         return trips
 
 

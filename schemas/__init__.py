@@ -7,7 +7,7 @@ from .user import (
     UserResetPassword,
     UserForgotPassword,
 )
-from .trip import TripCreate, TripOut, TripUpdate
+from .trip import TripCreate, TripOut, TripUpdate, TripType, TripScope
 from .token import TokenOut, TokenIn, GoogleToken
 from .location import LocationCreate, LocationUpdate, LocationOut
 from .trip_like import TripLikeCreate, TripLikeUpdate, TripLikeOut

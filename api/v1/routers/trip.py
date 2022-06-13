@@ -8,6 +8,7 @@ import exceptions
 from core.config import settings
 from worker import remind_trip
 from api.v1 import deps
+from schemas import TripType, TripScope
 
 router = APIRouter(prefix="/trips", tags=["Trips"])
 
@@ -15,18 +16,25 @@ router = APIRouter(prefix="/trips", tags=["Trips"])
 @router.get("", response_model=list[schemas.TripOut])
 async def get_trips(
     db: Session = Depends(deps.get_db),
-    is_around: bool = False,
-    is_global: bool = False,
+    type: TripType = TripType.ALL,
+    scope: TripScope = TripScope.ALL,
     skip: int = 0,
     limit: int | None = None,
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Retrieve trips by role."""
     if current_user.is_admin:
-        trips = crud.trip.get_multi(db, is_around=is_around, skip=skip, limit=limit)
+        trips = crud.trip.get_multi(
+            db, trip_type=type, trip_scope=scope, skip=skip, limit=limit
+        )
     else:
-        trips = crud.trip.get_multi_by_owner(
-            db, is_around=is_around, skip=skip, limit=limit, user_id=current_user.id
+        trips = crud.trip.get_multi(
+            db,
+            user_id=current_user.id,
+            trip_type=type,
+            trip_scope=scope,
+            skip=skip,
+            limit=limit,
         )
     return trips
 

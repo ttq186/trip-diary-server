@@ -1,9 +1,22 @@
+from enum import Enum
 from datetime import date, datetime
 
 from pydantic import validator
 
 from schemas import CamelModel
 from schemas.location import LocationOut
+
+
+class TripType(Enum):
+    ALL = "all"
+    SINGLE = "single"
+    AROUND = "around"
+
+
+class TripScope(Enum):
+    ALL = "all"
+    GLOBAL = "global"
+    LOCAL = "local"
 
 
 class TripBase(CamelModel):
@@ -63,7 +76,8 @@ class TripOut(TripBase):
 
     id: int
     num_of_likes: int
-    is_single: bool
+    type: TripType = TripType.ALL
+    scope: TripScope = TripScope.ALL
     locations: list[LocationOut]
 
     class Config:
