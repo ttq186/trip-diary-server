@@ -20,14 +20,8 @@ class TripCommentUpdate(TripCommentBase):
     pass
 
 
-class TripCommentInDbBase(TripCommentBase):
+class TripCommentOut(TripCommentBase):
+    pass
+
     class Config:
         orm_mode = True
-
-
-class TripCommentInDb(TripCommentInDbBase):
-    pass
-
-
-class TripCommentOut(TripCommentInDbBase):
-    pass

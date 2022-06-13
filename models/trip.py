@@ -45,3 +45,7 @@ class Trip(Base):
         if self.likes is None:
             return 0
         return len(self.likes)
+
+    @property
+    def is_single(self) -> bool:
+        return self.back_trip_at is None

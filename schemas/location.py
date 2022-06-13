@@ -36,17 +36,11 @@ class LocationUpdate(LocationBase):
     """Properties to return via Update endpoint."""
 
 
-class LocationInDbBase(LocationBase):
-    class Config:
-        orm_mode = True
-
-
-class LocationInDb(LocationInDbBase):
-    pass
-
-
-class LocationOut(LocationInDbBase):
+class LocationOut(LocationBase):
     """Properties to retur to client."""
 
     id: int
     images: list[LocationImageOut]
+
+    class Config:
+        orm_mode = True

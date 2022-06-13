@@ -58,18 +58,13 @@ class TripUpdate(TripBase):
         return v
 
 
-class TripInDBBase(TripBase):
-    class Config:
-        orm_mode = True
-
-
-class TripInDB(TripInDBBase):
-    pass
-
-
-class TripOut(TripInDB):
+class TripOut(TripBase):
     """Properties to return to client."""
 
     id: int
     num_of_likes: int
+    is_single: bool
     locations: list[LocationOut]
+
+    class Config:
+        orm_mode = True

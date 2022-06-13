@@ -23,14 +23,8 @@ class LocationImageUpdate(LocationImageBase):
     pass
 
 
-class LocationImageInDbBase(LocationImageBase):
+class LocationImageOut(LocationImageBase):
+    id: int
+
     class Config:
         orm_mode = True
-
-
-class LocationImageInDb(LocationImageInDbBase):
-    pass
-
-
-class LocationImageOut(LocationImageInDbBase):
-    id: int

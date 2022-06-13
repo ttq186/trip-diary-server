@@ -8,7 +8,6 @@ from core.security import get_hashed_password
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def get_by_email(self, db: Session, email: str) -> User | None:
-        # user = db.query(self._model).filter_by(email=email).first()
         user = db.query(User).filter_by(email=email).first()
         return user
 

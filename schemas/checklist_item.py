@@ -20,16 +20,10 @@ class CheckListItemUpdate(CheckListItemBase):
     """Properties to return via Update endpoint."""
 
 
-class CheckListItemInDbBase(CheckListItemBase):
-    class Config:
-        orm_mode = True
-
-
-class CheckListItemInDb(CheckListItemInDbBase):
-    pass
-
-
-class CheckListItemOut(CheckListItemInDbBase):
+class CheckListItemOut(CheckListItemBase):
     """Properties to retur to client."""
 
     id: int
+
+    class Config:
+        orm_mode = True

@@ -15,14 +15,8 @@ class TripLikeUpdate(TripLikeBase):
     pass
 
 
-class TripLikeInDbBase(TripLikeBase):
+class TripLikeOut(TripLikeBase):
+    pass
+
     class Config:
         orm_mode = True
-
-
-class TripLikeInDb(TripLikeInDbBase):
-    pass
-
-
-class TripLikeOut(TripLikeInDbBase):
-    pass
