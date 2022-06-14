@@ -13,7 +13,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from db.base_class import Base
-from schemas import TripType, TripScope
+from schemas import TripType
 
 
 class Trip(Base):
@@ -48,7 +48,7 @@ class Trip(Base):
         return len(self.likes)
 
     @property
-    def type(self) -> bool:
+    def type(self) -> TripType:
         if self.back_trip_at is None:
             return TripType.SINGLE
         return TripType.AROUND
