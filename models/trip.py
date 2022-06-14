@@ -37,7 +37,7 @@ class Trip(Base):
     can_be_reminded = Column(Boolean, default=True)
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
 
-    user = relationship("User", back_populates="trips")
+    author = relationship("User", back_populates="trips")
     comments = relationship("TripComment", back_populates="trip")
     likes = relationship("TripLike", back_populates="trip")
     checklist_items = relationship("ChecklistItem", back_populates="trip")

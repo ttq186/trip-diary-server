@@ -4,8 +4,8 @@ from datetime import date, datetime
 from pydantic import validator
 
 from schemas import CamelModel
-from schemas.location import LocationOut
-
+from .location import LocationOut
+from .user import UserOut
 
 class TripType(Enum):
     ALL = "all"
@@ -75,6 +75,7 @@ class TripOut(TripBase):
     """Properties to return to client."""
 
     id: int
+    author: UserOut | None
     num_of_likes: int
     type: TripType = TripType.ALL
     scope: TripScope = TripScope.ALL
