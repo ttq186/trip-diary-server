@@ -16,26 +16,22 @@ router = APIRouter(prefix="/trips", tags=["Trips"])
 @router.get("/me", response_model=list[schemas.TripOut])
 async def get_trips_by_owner(
     db: Session = Depends(deps.get_db),
+    search: str | None = None,
     type: TripType = TripType.ALL,
     scope: TripScope = TripScope.ALL,
     skip: int = 0,
     limit: int | None = None,
     current_user: models.User = Depends(deps.get_current_user),
 ):
-    """Retrieve trips by role."""
-    if current_user.is_admin:
-        trips = crud.trip.get_multi(
-            db, trip_type=type, trip_scope=scope, skip=skip, limit=limit
-        )
-    else:
-        trips = crud.trip.get_multi_by_owner(
-            db,
-            user_id=current_user.id,
-            trip_type=type,
-            trip_scope=scope,
-            skip=skip,
-            limit=limit,
-        )
+    trips = crud.trip.get_multi(
+        db,
+        search=search,
+        trip_type=type,
+        trip_scope=scope,
+        skip=skip,
+        limit=limit,
+        user_id=current_user.id,
+    )
     return trips
 
 
@@ -49,7 +45,6 @@ async def get_trips(
     limit: int | None = None,
     current_user: models.User = Depends(deps.get_current_user),
 ):
-    """Retrieve trips by role."""
     trips = crud.trip.get_multi(
         db,
         search=search,

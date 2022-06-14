@@ -11,9 +11,11 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from db.base_class import Base
 from schemas import TripType
+from .user import User
 
 
 class Trip(Base):
@@ -52,3 +54,35 @@ class Trip(Base):
         if self.back_trip_at is None:
             return TripType.SINGLE
         return TripType.AROUND
+
+    @hybrid_property
+    def author_username(self) -> str:
+        pass
+
+    @author_username.expression
+    def author_username(cls) -> str:
+        return User.username
+
+    @hybrid_property
+    def author_first_name(self) -> str:
+        pass
+
+    @author_first_name.expression
+    def author_first_name(cls):
+        return User.first_name
+
+    @hybrid_property
+    def author_last_name(self) -> str:
+        pass
+
+    @author_last_name.expression
+    def author_last_name(cls):
+        return User.last_name
+
+    @hybrid_property
+    def author_email(self) -> str:
+        pass
+
+    @author_email.expression
+    def author_email(cls) -> str:
+        return User.email
