@@ -7,6 +7,7 @@ from schemas import CamelModel
 from .location import LocationOut
 from .user import UserOut
 
+
 class TripType(Enum):
     ALL = "all"
     SINGLE = "single"
@@ -35,7 +36,6 @@ class TripBase(CamelModel):
     is_finished: bool | None = None
     is_public: bool | None = None
     can_be_reminded: bool | None = None
-    user_id: str | None = None
 
 
 class TripCreate(TripBase):
@@ -49,6 +49,7 @@ class TripCreate(TripBase):
     start_at: date
     is_public: bool = True
     can_be_reminded: bool = True
+    user_id: str | None = None
 
     @validator("start_at")
     def date_must_be_in_future(cls, v):

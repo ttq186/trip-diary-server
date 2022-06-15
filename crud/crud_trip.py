@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from models.user import User
 
 from schemas import TripCreate, TripUpdate, TripScope, TripType
 from models import Trip
@@ -16,7 +17,7 @@ class CRUDTrip(CRUDBase[Trip, TripCreate, TripUpdate]):
         search: str | None = None,
         user_id: str | None = None,
     ) -> list[Trip]:
-        stmt = db.query(Trip)
+        stmt = db.query(Trip).join(User)
         if user_id is not None:
             stmt = stmt.filter(Trip.user_id == user_id)
 
