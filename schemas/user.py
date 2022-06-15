@@ -58,6 +58,7 @@ class UserOut(UserInDbBase):
     """Properties to return to client."""
 
     is_admin: bool = False
+    num_of_trips: int = 0
 
 
 class UserBlobSASOut(CamelModel):

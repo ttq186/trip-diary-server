@@ -32,3 +32,9 @@ class User(Base):
     @property
     def fullname(self) -> str:
         return self.first_name + self.last_name
+
+    @property
+    def num_of_trips(self) -> int:
+        if self.trips is None:
+            return 0
+        return len(self.trips)
