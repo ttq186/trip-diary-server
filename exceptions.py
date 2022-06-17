@@ -33,15 +33,19 @@ class IncorrectLoginCredentials(HTTPException):
 
 class AccountCreatedWithOutGoogle(HTTPException):
     def __init__(self):
-        detail = """Looks like an account has been created before \
-            without Google sign in method. Try again!"""
+        detail = (
+            "Looks like an account has been created before without "
+            "Google sign in method. Try again!"
+        )
         super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
 
 
 class AccountCreatedByGoogle(HTTPException):
     def __init__(self):
-        detail = """Looks like this account has been created by \
-             Google sign in method. Try again!"""
+        detail = (
+            "Looks like this account has been created by "
+            "Google sign in method. Try again!"
+        )
         super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
 
 
