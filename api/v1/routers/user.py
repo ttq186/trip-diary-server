@@ -82,6 +82,7 @@ async def create_user(
     while crud.user.get(db, id=new_user_id) is not None:
         new_user_id = utils.generate_uuid()
     user_in.id = new_user_id
+    user_in.password = security.get_hashed_password(user_in.password)
     new_user = crud.user.create(db, obj_in=user_in)
     return new_user
 

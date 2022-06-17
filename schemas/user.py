@@ -26,7 +26,7 @@ class UserCreate(UserBase):
     """Properties to receive via Create endpoint."""
 
     email: EmailStr
-    password: str
+    password: str | None = None
 
 
 class UserUpdate(UserBase):
