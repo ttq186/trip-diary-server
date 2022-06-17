@@ -14,8 +14,10 @@ class TripComment(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
     updated_at = Column(DateTime(timezone=True))
+    comment_id = Column(Integer, ForeignKey("trip_comment.id", ondelete="CASCADE"))
     trip_id = Column(Integer, ForeignKey("trip.id", ondelete="CASCADE"))
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
 
     user = relationship("User", back_populates="trip_comments")
     trip = relationship("Trip", back_populates="comments")
+    comments = relationship("TripComment")

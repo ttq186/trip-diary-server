@@ -10,7 +10,7 @@ from api.v1.routers import (
     trip_like,
     location,
     trip_comment,
-    location_image,
+    location_file,
     checklist_item,
 )
 
@@ -36,7 +36,7 @@ app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(trip.router)
 app.include_router(location.router)
-app.include_router(location_image.router)
+app.include_router(location_file.router)
 app.include_router(checklist_item.router)
 app.include_router(trip_like.router)
 app.include_router(trip_comment.router)

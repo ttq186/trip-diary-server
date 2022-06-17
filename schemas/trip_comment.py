@@ -10,6 +10,7 @@ class TripCommentBase(CamelModel):
     updated_at: datetime | None = None
     trip_id: int | None = None
     user_id: str | None = None
+    comment_id: int | None = None
 
 
 class TripCommentCreate(TripCommentBase):

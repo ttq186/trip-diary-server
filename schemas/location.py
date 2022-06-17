@@ -3,7 +3,7 @@ from datetime import date
 from pydantic import validator
 
 from schemas import CamelModel
-from schemas.location_image import LocationImageOut
+from schemas.location_file import LocationFileOut
 
 
 class LocationBase(CamelModel):
@@ -40,7 +40,7 @@ class LocationOut(LocationBase):
     """Properties to retur to client."""
 
     id: int
-    images: list[LocationImageOut]
+    files: list[LocationFileOut]
 
     class Config:
         orm_mode = True

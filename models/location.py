@@ -16,4 +16,4 @@ class Location(Base):
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
 
     trip = relationship("Trip", back_populates="locations")
-    images = relationship("LocationImage", back_populates="location")
+    files = relationship("LocationFile", back_populates="location")

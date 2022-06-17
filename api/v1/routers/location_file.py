@@ -13,7 +13,7 @@ router = APIRouter(prefix="/trips", tags=["Location Images"])
 
 @router.get(
     "/{trip_id}/locations/{location_id}/images",
-    response_model=list[schemas.LocationImageOut],
+    response_model=list[schemas.LocationFileOut],
 )
 async def get_location_images(
     trip_id: int,
@@ -36,7 +36,7 @@ async def get_location_images(
 
 @router.get(
     "/{trip_id}/locations/{location_id}/images/{image_id}",
-    response_model=schemas.LocationImageOut,
+    response_model=schemas.LocationFileOut,
 )
 async def get_location_image(
     trip_id: int,
@@ -75,12 +75,12 @@ async def get_location_image(
 
 @router.post(
     "/{trip_id}/locations/{location_id}/images",
-    response_model=schemas.LocationImageOut,
+    response_model=schemas.LocationFileOut,
 )
 async def create_location_image(
     trip_id: int,
     location_id: int,
-    location_image_in: schemas.LocationImageCreate,
+    location_image_in: schemas.LocationFileCreate,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
@@ -97,7 +97,7 @@ async def create_location_image(
 @router.delete(
     "/{trip_id}/locations/{location_id}/images/{image_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    response_class=Response
+    response_class=Response,
 )
 async def delete_location_image(
     trip_id: int,

@@ -6,5 +6,5 @@ from models import (  # noqa
     TripLike,
     TripComment,
     ChecklistItem,
-    LocationImage,
+    LocationFile,
 )

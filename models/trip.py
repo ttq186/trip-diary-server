@@ -8,6 +8,7 @@ from sqlalchemy import (
     DateTime,
     Boolean,
     Float,
+    Enum,
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -15,6 +16,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from db.base_class import Base
 from schemas import TripType
+from schemas.trip import TripScope
 from .user import User
 
 
@@ -36,6 +38,7 @@ class Trip(Base):
     is_public = Column(Boolean, default=True)
     can_be_reminded = Column(Boolean, default=True)
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
+    scope = Column(Enum(TripScope))
 
     author = relationship("User", back_populates="trips")
     comments = relationship("TripComment", back_populates="trip")

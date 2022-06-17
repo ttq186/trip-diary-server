@@ -36,6 +36,7 @@ class TripBase(CamelModel):
     is_finished: bool | None = None
     is_public: bool | None = None
     can_be_reminded: bool | None = None
+    scope: TripScope | None = None
 
 
 class TripCreate(TripBase):
@@ -79,7 +80,6 @@ class TripOut(TripBase):
     author: UserOut | None
     num_of_likes: int
     type: TripType = TripType.ALL
-    scope: TripScope = TripScope.ALL
     locations: list[LocationOut]
 
     class Config:
