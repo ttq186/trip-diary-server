@@ -10,8 +10,8 @@ class CRUDTrip(CRUDBase[Trip, TripCreate, TripUpdate]):
     def get_multi(
         self,
         db: Session,
-        trip_type: TripType = TripType.ALL,
-        trip_scope: TripScope = TripScope.ALL,
+        trip_type: TripType | None = None,
+        trip_scope: TripScope | None = None,
         skip: int = 0,
         limit: int | None = None,
         search: str | None = None,
@@ -20,6 +20,9 @@ class CRUDTrip(CRUDBase[Trip, TripCreate, TripUpdate]):
         stmt = db.query(Trip).join(User)
         if user_id is not None:
             stmt = stmt.filter(Trip.user_id == user_id)
+
+        if trip_scope is not None:
+            stmt = stmt.filter(Trip.scope == trip_scope)
 
         if trip_type == TripType.AROUND:
             stmt = stmt.filter(Trip.back_trip_at.isnot(None))

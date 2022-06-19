@@ -9,13 +9,11 @@ from .user import UserOut
 
 
 class TripType(Enum):
-    ALL = "all"
     SINGLE = "single"
     AROUND = "around"
 
 
 class TripScope(Enum):
-    ALL = "all"
     GLOBAL = "global"
     LOCAL = "local"
 
@@ -53,7 +51,16 @@ class TripCreate(TripBase):
     user_id: str | None = None
 
     @validator("start_at")
-    def date_must_be_in_future(cls, v):
+    def start_date_must_be_in_future(cls, v):
+        curr_date = date.today()
+        if curr_date >= v:
+            raise ValueError("Date must in the future")
+        return v
+
+    @validator("back_trip_at")
+    def back_date_must_be_in_future(cls, v):
+        if v is None:
+            return v
         curr_date = date.today()
         if curr_date >= v:
             raise ValueError("Date must in the future")
@@ -63,8 +70,15 @@ class TripCreate(TripBase):
 class TripUpdate(TripBase):
     """Properties to receive via Update endpoint."""
 
+    @validator("start_at")
+    def start_date_must_be_in_future(cls, v):
+        curr_date = date.today()
+        if curr_date >= v:
+            raise ValueError("Date must in the future")
+        return v
+
     @validator("back_trip_at")
-    def date_must_be_in_future(cls, v):
+    def back_date_must_be_in_future(cls, v):
         if v is None:
             return v
         curr_date = date.today()
@@ -79,7 +93,7 @@ class TripOut(TripBase):
     id: int
     author: UserOut | None
     num_of_likes: int
-    type: TripType = TripType.ALL
+    type: TripType | None = None
     locations: list[LocationOut]
 
     class Config:

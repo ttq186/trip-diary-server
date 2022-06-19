@@ -5,16 +5,16 @@ from schemas import CamelModel
 
 
 class FileType(Enum):
-    IMAGE = "IMAGE"
-    VIDEO = "VIDEO"
-    COMPRESS = "COMPRESS"
+    IMAGE = "image"
+    VIDEO = "video"
+    OTHERS = "others"
 
 
 class LocationFileBase(CamelModel):
     """Shared properties."""
 
     url: str | None = None
-    type: FileType = FileType.IMAGE
+    type: FileType = FileType.OTHERS
     uploaded_at: datetime | None = None
     location_id: int | None = None
 

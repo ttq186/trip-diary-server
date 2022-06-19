@@ -17,8 +17,8 @@ router = APIRouter(prefix="/trips", tags=["Trips"])
 async def get_trips_by_owner(
     db: Session = Depends(deps.get_db),
     search: str | None = None,
-    type: TripType = TripType.ALL,
-    scope: TripScope = TripScope.ALL,
+    type: TripType | None = None,
+    scope: TripScope | None = None,
     skip: int = 0,
     limit: int | None = None,
     current_user: models.User = Depends(deps.get_current_user),
@@ -39,8 +39,8 @@ async def get_trips_by_owner(
 async def get_trips(
     db: Session = Depends(deps.get_db),
     search: str | None = None,
-    type: TripType = TripType.ALL,
-    scope: TripScope = TripScope.ALL,
+    type: TripType | None = None,
+    scope: TripScope | None = None,
     skip: int = 0,
     limit: int | None = None,
     current_user: models.User = Depends(deps.get_current_user),
