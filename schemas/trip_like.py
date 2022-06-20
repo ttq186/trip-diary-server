@@ -16,7 +16,5 @@ class TripLikeUpdate(TripLikeBase):
 
 
 class TripLikeOut(TripLikeBase):
-    pass
-
     class Config:
         orm_mode = True

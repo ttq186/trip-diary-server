@@ -61,15 +61,15 @@ class ResetLinkExpired(HTTPException):
         super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
 
 
-class TripLikeAlreadyMade(HTTPException):
-    def __init__(self) -> None:
-        detail = "You already liked this trip!"
+class LikeAlreadyMade(HTTPException):
+    def __init__(self, resource_type: str) -> None:
+        detail = f"You already liked this {resource_type.lower()}!"
         super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
 
 
-class TripLikeHasNotBeenMade(HTTPException):
-    def __init__(self) -> None:
-        detail = "You haven't liked this trip!"
+class LikeHasNotBeenMade(HTTPException):
+    def __init__(self, resource_type: str) -> None:
+        detail = f"You haven't liked this {resource_type.lower()}!"
         super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
 
 

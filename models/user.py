@@ -28,6 +28,7 @@ class User(Base):
     trips = relationship("Trip", back_populates="author")
     trip_comments = relationship("TripComment", back_populates="user")
     trip_likes = relationship("TripLike", back_populates="user")
+    comment_likes = relationship("CommentLike", back_populates="user")
 
     @property
     def fullname(self) -> str:

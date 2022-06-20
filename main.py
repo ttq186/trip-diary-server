@@ -9,6 +9,7 @@ from api.v1.routers import (
     trip,
     trip_like,
     location,
+    comment_like,
     trip_comment,
     location_file,
     checklist_item,
@@ -40,3 +41,4 @@ app.include_router(location_file.router)
 app.include_router(checklist_item.router)
 app.include_router(trip_like.router)
 app.include_router(trip_comment.router)
+app.include_router(comment_like.router)

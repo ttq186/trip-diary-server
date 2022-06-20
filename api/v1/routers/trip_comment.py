@@ -9,10 +9,10 @@ import crud
 import exceptions
 from api.v1 import deps
 
-router = APIRouter(prefix="/trips", tags=["Comments"])
+router = APIRouter(prefix="/trips/{trip_id}/comments", tags=["Comments"])
 
 
-@router.get("/{trip_id}/comments", response_model=list[schemas.TripCommentOut])
+@router.get("", response_model=list[schemas.TripCommentOut])
 async def get_comments(
     trip_id: int,
     db: Session = Depends(deps.get_db),
@@ -25,7 +25,7 @@ async def get_comments(
     return trip_comments
 
 
-@router.get("/{trip_id}/comments/{comment_id}", response_model=schemas.TripCommentOut)
+@router.get("/{comment_id}", response_model=schemas.TripCommentOut)
 async def get_comment(
     trip_id: int,
     comment_id: int,
@@ -42,7 +42,7 @@ async def get_comment(
     return trip_comment
 
 
-@router.post("/{trip_id}/comments", response_model=schemas.TripCommentOut)
+@router.post("", response_model=schemas.TripCommentOut)
 async def create_comment(
     trip_id: int,
     trip_comment_in: schemas.TripCommentCreate,
@@ -52,8 +52,8 @@ async def create_comment(
     trip = crud.trip.get(db, id=trip_id)
     if trip is None:
         raise exceptions.ResourceNotFound(resource_type="Trip", id=trip_id)
-    if trip.id != trip_id or trip.user_id != current_user.id:
-        raise exceptions.NotAuthorized()
+    # if trip.id != trip_id or trip.user_id != current_user.id:
+    #     raise exceptions.NotAuthorized()
 
     trip_comment_in.trip_id = trip_id
     trip_comment_in.user_id = current_user.id
@@ -61,7 +61,7 @@ async def create_comment(
     return trip_comment
 
 
-@router.put("/{trip_id}/comments/{comment_id}", response_model=schemas.TripCommentOut)
+@router.put("/{comment_id}", response_model=schemas.TripCommentOut)
 async def update_comment(
     trip_id: int,
     comment_id: int,
@@ -86,7 +86,7 @@ async def update_comment(
 
 
 @router.delete(
-    "/{trip_id}/comments/{comment_id}",
+    "/{comment_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     response_class=Response,
 )
@@ -103,6 +103,6 @@ async def delete_comment(
     trip_comment = crud.trip_comment.get(db, id=comment_id)
     if trip_comment is None:
         raise exceptions.ResourceNotFound(resource_type="Comment", id=comment_id)
-    if trip_comment.user_id != current_user.id and (not current_user.is_admin):
+    if trip_comment.user_id != current_user.id:
         raise exceptions.NotAuthorized()
     crud.trip_comment.remove(db, id=comment_id)

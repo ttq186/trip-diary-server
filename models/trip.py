@@ -48,9 +48,7 @@ class Trip(Base):
 
     @property
     def num_of_likes(self) -> int:
-        if self.likes is None:
-            return 0
-        return len(self.likes)
+        return len(self.likes) if self.likes is not None else 0
 
     @property
     def type(self) -> TripType:

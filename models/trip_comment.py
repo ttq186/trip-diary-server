@@ -21,3 +21,8 @@ class TripComment(Base):
     user = relationship("User", back_populates="trip_comments")
     trip = relationship("Trip", back_populates="comments")
     replies = relationship("TripComment", cascade="all,delete")
+    likes = relationship("CommentLike", back_populates="comment")
+
+    @property
+    def num_of_likes(self) -> int:
+        return len(self.likes) if self.likes is not None else 0
