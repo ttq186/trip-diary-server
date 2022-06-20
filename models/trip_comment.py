@@ -20,4 +20,4 @@ class TripComment(Base):
 
     user = relationship("User", back_populates="trip_comments")
     trip = relationship("Trip", back_populates="comments")
-    comments = relationship("TripComment")
+    replies = relationship("TripComment", cascade="all,delete")

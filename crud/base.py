@@ -24,7 +24,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self._model = model
 
     def create(self, db: Session, obj_in: CreateSchemaType) -> ModelType:
-        db_obj = self._model(**obj_in.dict())
+        db_obj = self._model(**obj_in.dict(exclude={"id", "is_admin"}))
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
@@ -49,7 +49,10 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
-            update_data = obj_in.dict(exclude_unset=True)
+            update_data = obj_in.dict(
+                exclude_unset=True,
+                exclude={"id", "user_id", "is_admin", "trip_id", "comment_id"},
+            )
 
         for field in obj_data:
             if field in update_data:

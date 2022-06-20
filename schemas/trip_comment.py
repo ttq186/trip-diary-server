@@ -21,8 +21,10 @@ class TripCommentUpdate(TripCommentBase):
     pass
 
 
-class TripCommentOut(TripCommentBase):
-    pass
-
+class TripCommentOutBase(TripCommentBase):
     class Config:
         orm_mode = True
+
+
+class TripCommentOut(TripCommentOutBase):
+    replies: list[TripCommentOutBase] = []
