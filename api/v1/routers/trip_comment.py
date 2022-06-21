@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from fastapi import APIRouter, status, Depends, Response
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 import schemas
@@ -22,7 +23,14 @@ async def get_comments(
     if trip is None:
         raise exceptions.ResourceNotFound(resource_type="Trip", id=trip_id)
     trip_comments = crud.trip_comment.get_multi_by_trip_id(db, trip_id=trip_id)
-    return trip_comments
+    trip_comments_out = []
+    for comment in trip_comments:
+        if current_user.id in comment.liked_by_users_with_id:
+            comment = schemas.TripCommentOut(
+                **jsonable_encoder(comment), has_liked=True
+            )
+        trip_comments_out.append(comment)
+    return trip_comments_out
 
 
 @router.get("/{comment_id}", response_model=schemas.TripCommentOut)

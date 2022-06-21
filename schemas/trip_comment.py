@@ -27,4 +27,5 @@ class TripCommentOutBase(TripCommentBase):
 
 
 class TripCommentOut(TripCommentOutBase):
+    has_liked: bool = False
     replies: list[TripCommentOutBase] = []

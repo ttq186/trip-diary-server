@@ -71,7 +71,7 @@ async def delete_like(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
-    comment = crud.trip_comment.get(db, id=trip_id)
+    comment = crud.trip_comment.get(db, id=comment_id)
     if comment is None:
         raise exceptions.ResourceNotFound(resource_type="Comment", id=comment_id)
     # if comment.user_id != current_user.id:

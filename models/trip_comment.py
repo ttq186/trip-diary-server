@@ -26,3 +26,7 @@ class TripComment(Base):
     @property
     def num_of_likes(self) -> int:
         return len(self.likes) if self.likes is not None else 0
+
+    @property
+    def liked_by_users_with_id(self) -> list[str]:
+        return [like.user_id for like in self.likes]
