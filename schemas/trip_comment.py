@@ -40,6 +40,7 @@ class TripCommentAuthorOut(CamelModel):
 
 
 class TripCommentOut(TripCommentOutBase):
-    author: TripCommentAuthorOut
+    num_of_likes: int = 0
+    author: TripCommentAuthorOut | None
     has_liked: bool = False
     replies: list[TripCommentOutBase] = []

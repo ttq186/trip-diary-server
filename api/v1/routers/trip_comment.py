@@ -27,7 +27,9 @@ async def get_comments(
     for comment in trip_comments:
         if current_user.id in comment.liked_by_users_with_id:
             comment = schemas.TripCommentOut(
-                **jsonable_encoder(comment), has_liked=True
+                **jsonable_encoder(comment),
+                has_liked=True,
+                num_of_likes=comment.num_of_likes
             )
         trip_comments_out.append(comment)
     return trip_comments_out
