@@ -26,7 +26,7 @@ class User(Base):
     is_admin = Column(Boolean, default=False)
 
     trips = relationship("Trip", back_populates="author")
-    trip_comments = relationship("TripComment", back_populates="user")
+    trip_comments = relationship("TripComment", back_populates="author")
     trip_likes = relationship("TripLike", back_populates="user")
     comment_likes = relationship("CommentLike", back_populates="user")
 

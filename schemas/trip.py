@@ -1,11 +1,10 @@
 from enum import Enum
 from datetime import date, datetime
 
-from pydantic import validator
+from pydantic import validator, EmailStr
 
 from schemas import CamelModel
 from .location import LocationOut
-from .user import UserOut
 
 
 class TripType(Enum):
@@ -87,11 +86,22 @@ class TripUpdate(TripBase):
         return v
 
 
+class TripAuthorOut(CamelModel):
+    id: str | None = None
+    email: EmailStr | None = None
+    first_name: str | None = None
+    last_name: str | None = None
+    username: str | None = None
+
+    class Config:
+        orm_mode = True
+
+
 class TripOut(TripBase):
     """Properties to return to client."""
 
     id: int
-    author: UserOut | None
+    author: TripAuthorOut | None
     num_of_likes: int
     type: TripType | None = None
     locations: list[LocationOut]

@@ -18,7 +18,7 @@ class TripComment(Base):
     trip_id = Column(Integer, ForeignKey("trip.id", ondelete="CASCADE"))
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
 
-    user = relationship("User", back_populates="trip_comments")
+    author = relationship("User", back_populates="trip_comments")
     trip = relationship("Trip", back_populates="comments")
     replies = relationship("TripComment", cascade="all,delete")
     likes = relationship("CommentLike", back_populates="comment")
