@@ -76,6 +76,7 @@ async def create_location_file(
     if location.trip_id != trip_id or location.user_id != current_user.id:
         raise exceptions.NotAuthorized()
     location_file_in.location_id = location_id
+    location_file_in.type = location_file_in.type.value
     location_file = crud.location_file.create(db, obj_in=location_file_in)
     return location_file
 

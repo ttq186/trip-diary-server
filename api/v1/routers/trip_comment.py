@@ -28,6 +28,7 @@ async def get_comments(
         if current_user.id in comment.liked_by_users_with_id:
             comment = schemas.TripCommentOut(
                 **jsonable_encoder(comment),
+                author=comment.author,
                 has_liked=True,
                 num_of_likes=comment.num_of_likes
             )
