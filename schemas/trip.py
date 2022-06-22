@@ -92,6 +92,7 @@ class TripAuthorOut(CamelModel):
     first_name: str | None = None
     last_name: str | None = None
     username: str | None = None
+    num_of_trips: int
 
     class Config:
         orm_mode = True

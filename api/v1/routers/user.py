@@ -51,6 +51,14 @@ async def get_users(
     return users
 
 
+@router.get("/me", response_model=schemas.UserOut)
+async def get_user_me(
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_user),
+):
+    return current_user
+
+
 @router.get("/{id}", response_model=schemas.UserOut)
 async def get_user(
     id: str,

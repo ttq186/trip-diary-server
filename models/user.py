@@ -36,6 +36,4 @@ class User(Base):
 
     @property
     def num_of_trips(self) -> int:
-        if self.trips is None:
-            return 0
-        return len(self.trips)
+        return len(self.trips) if self.trips is not None else 0
