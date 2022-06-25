@@ -31,6 +31,12 @@ class IncorrectLoginCredentials(HTTPException):
         super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=detail)
 
 
+class InvalidGoogleLoginCredentials(HTTPException):
+    def __init__(self):
+        detail = "Your credentials are invalid!"
+        super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=detail)
+
+
 class AccountCreatedWithOutGoogle(HTTPException):
     def __init__(self):
         detail = (

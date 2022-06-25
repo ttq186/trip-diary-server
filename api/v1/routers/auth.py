@@ -8,6 +8,7 @@ import schemas
 import crud
 import exceptions
 import utils
+from models import User
 from core import security
 from core.config import settings
 from api.v1 import deps
@@ -40,10 +41,15 @@ async def login(
 async def login_via_google(
     payload: schemas.GoogleToken, db: Session = Depends(deps.get_db)
 ):
-    user_data = id_token.verify_oauth2_token(
-        payload.token_id, request, settings.GOOGLE_CLIENT_ID
-    )
-    user = crud.user.get_by_email(db, email=user_data.get("email"))
+    user: User = None
+    user_data: dict = None
+    try:
+        user_data = id_token.verify_oauth2_token(
+            payload.token_id, request, settings.GOOGLE_CLIENT_ID
+        )
+        user = crud.user.get_by_email(db, email=user_data.get("email"))
+    except Exception:
+        raise exceptions.InvalidGoogleLoginCredentials()
 
     # if email does not exist, create a new user with empty password
     if user is None:
