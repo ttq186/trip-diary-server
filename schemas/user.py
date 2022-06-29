@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from pydantic import EmailStr
 
@@ -18,7 +18,7 @@ class UserBase(CamelModel):
     is_female: bool | None = None
     description: str | None = None
     country: str | None = None
-    date_of_birth: datetime | None = None
+    date_of_birth: date | None = None
     created_at: datetime | None = None
 
 
