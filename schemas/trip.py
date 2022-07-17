@@ -95,6 +95,7 @@ class TripAuthorOut(CamelModel):
     num_of_trips: int
     avatar_url: str | None = None
     cover_img_url: str | None = None
+    country: str | None = None
     description: str | None = None
 
     class Config:

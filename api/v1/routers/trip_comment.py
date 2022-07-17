@@ -114,6 +114,6 @@ async def delete_comment(
     trip_comment = crud.trip_comment.get(db, id=comment_id)
     if trip_comment is None:
         raise exceptions.ResourceNotFound(resource_type="Comment", id=comment_id)
-    if trip_comment.user_id != current_user.id:
+    if trip_comment.trip_id != trip_id.id:
         raise exceptions.NotAuthorized()
     crud.trip_comment.remove(db, id=comment_id)
