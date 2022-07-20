@@ -12,6 +12,7 @@ from azure.storage.blob import (
 from api.v1 import deps
 from core import security
 from core.config import settings
+from worker import send_verify_account_email
 import crud
 import exceptions
 import schemas
@@ -33,6 +34,21 @@ async def get_blob_sas(current_user: models.User = Depends(deps.get_current_user
         expiry=datetime.now() + timedelta(hours=12),
     )
     return schemas.UserBlobSASOut(sas_token=sas_token)
+
+
+@router.post("/{id}/verify/{token}")
+async def verify_user(id: str, token: str, db: Session = Depends(deps.get_db)):
+    user = crud.user.get(db, id=id)
+    if user is None:
+        raise exceptions.ResourceNotFound(resource_type="User", id=id)
+    if user.is_verified:
+        raise exceptions.AccountHasBeenVerified()
+
+    token_data = security.decode_jwt_token(token)
+    if token_data is None:
+        raise exceptions.VerifyLinkHasExpired()
+    user = crud.user.update(db, db_obj=user, obj_in={"is_verified": True})
+    return {"detail": "Verify account successfully!"}
 
 
 @router.get("", response_model=list[schemas.UserOut])
@@ -74,7 +90,7 @@ async def get_user(
     return user
 
 
-@router.post("", response_model=schemas.UserOut)
+@router.post("", status_code=status.HTTP_201_CREATED)
 async def create_user(
     user_in: schemas.UserCreate,
     db: Session = Depends(deps.get_db),
@@ -93,7 +109,13 @@ async def create_user(
     if user_in.password is not None:
         user_in.password = security.get_hashed_password(user_in.password)
     new_user = crud.user.create(db, obj_in=user_in)
-    return new_user
+
+    verify_token = security.create_access_token(
+        {"id": new_user_id}, expires_delta=timedelta(minutes=15)
+    )
+    verify_link = f"{settings.BASE_URL}/users/{new_user_id}/verify/{verify_token}"
+    send_verify_account_email.apply_async((new_user.email, verify_link))
+    return {"detail": "Sign up successfully!"}
 
 
 @router.put("/{id}", response_model=schemas.UserOut)
@@ -144,9 +166,7 @@ async def forgot_password(
     reset_token = security.create_access_token(
         to_encode, timedelta(minutes=15), JWT_SECRET_KEY=SECRET_KEY
     )
-    reset_link = (
-        f"{settings.PASSWORD_RESET_BASE_URL}/reset-password/{user.id}/{reset_token}"
-    )
+    reset_link = f"{settings.BASE_URL}/reset-password/{user.id}/{reset_token}"
     utils.send_reset_password_email(to_email=user_in.email, reset_link=reset_link)
     return {"detail": "Password reset requests successfully!"}
 

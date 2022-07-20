@@ -18,3 +18,8 @@ def remind_trip(to_email, start_date, remind_link: str | None = None):
         )
     else:
         utils.send_remind_trip_email_again(to_email=to_email, start_date=start_date)
+
+
+@celery.task
+def send_verify_account_email(to_email, verify_link: str):
+    utils.send_verify_account_email(to_email, verify_link)

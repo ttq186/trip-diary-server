@@ -23,6 +23,7 @@ class User(Base):
     created_at = Column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
+    is_verified = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
 
     trips = relationship("Trip", back_populates="author")

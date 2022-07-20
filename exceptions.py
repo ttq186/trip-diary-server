@@ -7,6 +7,18 @@ class NotAuthorized(HTTPException):
         super().__init__(status_code=status.HTTP_401_UNAUTHORIZED, detail=detail)
 
 
+class AccountHasBeenVerified(HTTPException):
+    def __init__(self) -> None:
+        detail = "Your account has already been verified!"
+        super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
+
+
+class VerifyLinkHasExpired(HTTPException):
+    def __init__(self) -> None:
+        detail = "The verify link has expired. Try again!"
+        super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
+
+
 class ResourceNotFound(HTTPException):
     def __init__(self, resource_type, id) -> None:
         detail = f"{resource_type} with id {id} not found!"

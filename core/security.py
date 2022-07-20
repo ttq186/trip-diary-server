@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from jose import jwt
+from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from core.config import settings
@@ -10,12 +10,10 @@ pwd_context = CryptContext(schemes=["bcrypt"])
 
 
 def create_access_token(
-    data: dict,
+    encoded_data: dict,
     expires_delta: Optional[timedelta] = None,
-    JWT_SECRET_KEY: Optional[str] = None,
-):
-    to_encode = data.copy()
-
+    jwt_secret_key: str | None = settings.JWT_SECRET_KEY,
+) -> str | None:
     if expires_delta is not None:
         expire = datetime.utcnow() + expires_delta
     else:
@@ -23,16 +21,26 @@ def create_access_token(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
 
-    to_encode.update({"exp": expire})
-    if JWT_SECRET_KEY is not None:
-        encoded_jwt = jwt.encode(
-            to_encode, JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM
+    encoded_data.update({"exp": expire})
+    try:
+        jwt_token = jwt.encode(
+            encoded_data, jwt_secret_key, algorithm=settings.JWT_ALGORITHM
         )
-    else:
-        encoded_jwt = jwt.encode(
-            to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM
-        )
-    return encoded_jwt
+        return jwt_token
+    except JWTError:
+        return None
+
+
+def decode_jwt_token(
+    token: str,
+    key: str | None = settings.JWT_SECRET_KEY,
+    algorithm: str | None = settings.JWT_ALGORITHM,
+) -> dict | None:
+    try:
+        token_data = jwt.decode(token, key, algorithm)
+        return token_data
+    except Exception:
+        return None
 
 
 def get_hashed_password(password: str) -> str:

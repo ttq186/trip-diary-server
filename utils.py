@@ -25,7 +25,7 @@ def is_valid_email(email: str) -> bool:
     return response.json().get("result") != "invalid"
 
 
-def send_reset_password_email(to_email, reset_link):
+def send_reset_password_email(to_email: str, reset_link: str):
     message = Mail(
         from_email=settings.SENDGRID_FROM_EMAIL,
         to_emails=to_email,
@@ -41,7 +41,7 @@ def send_reset_password_email(to_email, reset_link):
         print(e)
 
 
-def send_remind_trip_email(to_email, start_date, remind_link):
+def send_remind_trip_email(to_email: str, start_date: str, remind_link: str):
     message = Mail(
         from_email=settings.SENDGRID_FROM_EMAIL,
         to_emails=to_email,
@@ -59,17 +59,31 @@ def send_remind_trip_email(to_email, start_date, remind_link):
         print(e)
 
 
-def send_remind_trip_email_again(to_email, start_date):
+def send_remind_trip_email_again(to_email: str, start_date: str):
     message = Mail(
         from_email=settings.SENDGRID_FROM_EMAIL,
         to_emails=to_email,
         subject="Next trip is coming!",
     )
-    print(settings.SENDGRID_REMIND_TRIP_AGAIN_TEMPLATE_ID)
     message.template_id = settings.SENDGRID_REMIND_TRIP_AGAIN_TEMPLATE_ID
     message.dynamic_template_data = {
         "startDate": start_date,
     }
+    try:
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        sg.send(message)
+    except Exception as e:
+        print(e)
+
+
+def send_verify_account_email(to_email: str, verify_link: str):
+    message = Mail(
+        from_email=settings.SENDGRID_FROM_EMAIL,
+        to_emails=to_email,
+        subject="Verify your Tripari's account!",
+    )
+    message.template_id = settings.SENDGRID_VERIFY_ACCOUNT_TEMPLATE_ID
+    message.dynamic_template_data = {"verifyLink": verify_link}
     try:
         sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
         sg.send(message)

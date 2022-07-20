@@ -20,6 +20,7 @@ class UserBase(CamelModel):
     country: str | None = None
     date_of_birth: date | None = None
     created_at: datetime | None = None
+    is_verified: bool | None = None
 
 
 class UserCreate(UserBase):

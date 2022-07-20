@@ -24,7 +24,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self._model = model
 
     def create(self, db: Session, obj_in: CreateSchemaType) -> ModelType:
-        db_obj = self._model(**obj_in.dict(exclude={"id", "is_admin"}))
+        db_obj = self._model(**obj_in.dict(exclude={"is_admin"}))
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
