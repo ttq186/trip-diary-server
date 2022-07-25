@@ -13,6 +13,12 @@ class AccountHasBeenVerified(HTTPException):
         super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
 
 
+class AccountHasNotBeenVerified(HTTPException):
+    def __init__(self) -> None:
+        detail = "Your account has not been verified!"
+        super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=detail)
+
+
 class VerifyLinkHasExpired(HTTPException):
     def __init__(self) -> None:
         detail = "The verify link has expired. Try again!"

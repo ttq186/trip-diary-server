@@ -24,12 +24,12 @@ async def login(
     db: Session = Depends(deps.get_db),
 ):
     user = crud.user.get_by_email(db, email=form_data.username)
-    if user is None:
+    if user is None or not security.verify_password(form_data.password, user.password):
         raise exceptions.IncorrectLoginCredentials()
-    if not security.verify_password(form_data.password, user.password):
-        raise exceptions.IncorrectLoginCredentials()
+    if not user.is_verified:
+        raise exceptions.AccountHasNotBeenVerified()
 
-    access_token = security.create_access_token(data={"user_id": user.id})
+    access_token = security.create_access_token(encoded_data={"user_id": user.id})
     return {
         "access_token": access_token,
         "token_type": "Bearer",
@@ -57,6 +57,7 @@ async def login_via_google(
         while crud.user.get(db, id=new_user_id) is not None:
             new_user_id = utils.generate_uuid()
         user_in = schemas.UserCreate(id=new_user_id, email=user_data.get("email"))
+        user_in.is_verified = True
         new_user = crud.user.create(db, obj_in=user_in)
         user_id = new_user.id
     else:
@@ -65,7 +66,7 @@ async def login_via_google(
         if user.password is not None:
             raise exceptions.AccountCreatedWithOutGoogle()
         user_id = user.id
-    access_token = security.create_access_token(data={"user_id": user_id})
+    access_token = security.create_access_token(encoded_data={"user_id": user_id})
     return {
         "access_token": access_token,
         "token_type": "Bearer",
