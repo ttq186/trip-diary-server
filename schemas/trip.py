@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import date, datetime
 
-from pydantic import validator, EmailStr
+from pydantic import EmailStr
 
 from schemas import CamelModel
 from .location import LocationOut
@@ -49,41 +49,11 @@ class TripCreate(TripBase):
     can_be_reminded: bool = True
     user_id: str | None = None
 
-    @validator("start_at")
-    def start_date_must_be_in_future(cls, v):
-        curr_date = date.today()
-        if curr_date >= v:
-            raise ValueError("Date must in the future")
-        return v
-
-    @validator("back_trip_at")
-    def back_date_must_be_in_future(cls, v):
-        if v is None:
-            return v
-        curr_date = date.today()
-        if curr_date >= v:
-            raise ValueError("Date must in the future")
-        return v
-
 
 class TripUpdate(TripBase):
     """Properties to receive via Update endpoint."""
 
-    @validator("start_at")
-    def start_date_must_be_in_future(cls, v):
-        curr_date = date.today()
-        if curr_date >= v:
-            raise ValueError("Date must in the future")
-        return v
-
-    @validator("back_trip_at")
-    def back_date_must_be_in_future(cls, v):
-        if v is None:
-            return v
-        curr_date = date.today()
-        if curr_date >= v:
-            raise ValueError("Date must in the future")
-        return v
+    pass
 
 
 class TripAuthorOut(CamelModel):
