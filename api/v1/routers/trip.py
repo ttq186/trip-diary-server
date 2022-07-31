@@ -81,18 +81,20 @@ async def create_trip(
     trip_in.user_id = current_user.id
     trip = crud.trip.create(db, trip_in)
 
-    start_date = str(trip.start_at).split(" ")[0]
-    remind_link = f"{settings.BASE_URL}/trips/{trip.id}/remind-again"
+    if not trip.is_finished:
+        start_date = str(trip.start_at).split(" ")[0]
+        remind_link = f"{settings.BASE_URL}/trips/{trip.id}/remind-again"
 
-    # For prod:
-    # time_delta = trip.start_at.days() - trip.created_at.days()
-    # task_countdown_seconds = timedelta(
-    #     days=trip.start_at.days - (1 if time_delta != 1 else 0.5)
-    # )
-    task_countdown_seconds = 30  # For demo
-    remind_trip.apply_async(
-        (current_user.email, start_date, remind_link), countdown=task_countdown_seconds
-    )
+        # For prod:
+        # time_delta = trip.start_at.days() - trip.created_at.days()
+        # task_countdown_seconds = timedelta(
+        #     days=trip.start_at.days - (1 if time_delta != 1 else 0.5)
+        # )
+        task_countdown_seconds = 30  # For demo
+        remind_trip.apply_async(
+            (current_user.email, start_date, remind_link),
+            countdown=task_countdown_seconds,
+        )
     return trip
 
 
