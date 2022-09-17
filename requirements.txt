@@ -24,7 +24,7 @@ ecdsa==0.17.0
 email-validator==1.2.1
 fastapi==0.78.0
 flake8==4.0.1
-flower==1.0.0
+flower==1.2.0
 geographiclib==1.52
 google-auth==2.6.6
 greenlet==1.1.2
